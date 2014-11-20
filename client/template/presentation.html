@@ -1,3 +1,10 @@
+<template name="presentations">
+    <div class="container">
+    <p>All the presentations so far</p>
+        {{#each prezs}} {{> presentation}} {{/each}}
+    </div>
+</template>
+
 <template name="presentation">
     <div class="panel-primary panel">
         <div class="container">

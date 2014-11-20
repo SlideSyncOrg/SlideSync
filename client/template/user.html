@@ -1,0 +1,19 @@
+<template name="authenticatedUser">
+
+    <div class="container">
+
+        <p>content and stuff !</p>
+        {{#if currentUser}}
+            <div>
+                username loged in : {{currentUser.profile.name}}
+            </div>
+
+            <pre>{{currentUser.profile}}</pre>
+            <span class="text">
+                There you are, authenticated user.
+            </span> 
+        {{/if}}
+
+
+    </div>
+</template>

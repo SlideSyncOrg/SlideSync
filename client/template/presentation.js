@@ -1,18 +1,16 @@
-Template.body.helpers({
-	prez: function () {
+Meteor.subscribe("presentations");
+
+Template.presentations.helpers({
+	prezs: function () {
+		console.log("Try to find prezs ")
 		return Presentations.find({});
-	},
-	daUser: function(){
-		console.log(Meteor.user())
-		return Meteor.user();
 	}
 });
 
 
-Template.body.events({
+Template.presentations.events({
 	'submit .new-presentation': function (event) {
 		//add a new presentation
 	}
 });
 
-Meteor.subscribe("presentations");
