@@ -9,8 +9,24 @@ Template.presentations.helpers({
 
 
 Template.presentations.events({
-	'submit .new-presentation': function (event) {
-		//add a new presentation
-	}
-});
+    'submit #addPrez': function(event) {
+        //add a new presentation
+        console.log("Create a presentation ")
 
+
+        var title = event.target.title.value;
+
+        Presentations.insert({
+        	owner : Meteor.user().profile.name,
+        	ownerId : Meteor.userId(),
+            title: title,
+            createdAt: new Date() // current time
+        });
+
+        // Clear form
+        event.target.title.value = "";
+
+        //prevent the page to reload
+        return false;
+    }
+});
