@@ -1,10 +1,9 @@
 Meteor.subscribe("presentations");
 
 Template.presentations.helpers({
-	prezs: function () {
-		console.log("Try to find prezs ")
-		return Presentations.find({});
-	}
+    prezs: function() {
+        return Presentations.find({ownerId : Meteor.userId()});
+    }
 });
 
 
