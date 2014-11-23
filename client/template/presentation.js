@@ -10,19 +10,13 @@ Template.presentations.helpers({
 
 Template.presentations.events({
     'submit #addPrez': function(event) {
-        //add a new presentation
-        console.log("Create a presentation ")
+
 
 
         var title = event.target.title.value;
 
-        Presentations.insert({
-            owner: Meteor.user().profile.name,
-            ownerId: Meteor.userId(),
-            title: title,
-            createdAt: new Date() // current time
-        });
 
+        Meteor.call('insertPresentation',title);
         // Clear form
         event.target.title.value = "";
 
@@ -35,8 +29,8 @@ Template.presentations.events({
         console.log(this.title)
     },
 
-    'click #deleteBtn': function(event) {
-        console.log("delete this prez")
+    'click #deleteBtn': function() {
+        Meteor.call('deletePresentation',this);
     },
 
     'click #presentBtn': function(event) {
