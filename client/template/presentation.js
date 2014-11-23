@@ -27,5 +27,19 @@ Template.presentations.events({
 
         //prevent the page to reload
         return false;
-    }
+    },
+
+    'click #editBtn': function() {
+        console.log("edit this prez")
+        console.log(this.title)
+    },
+
+    'click #deleteBtn': function(event) {
+        console.log("delete this prez")
+    },
+
+    'click #presentBtn': function(event) {
+        console.log("present this prez")
+    },
+
 });
