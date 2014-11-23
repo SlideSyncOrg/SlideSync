@@ -1,25 +1,27 @@
 <template name="presentations">
     <div class="container">
+        <div class="col-md-12">
+            <form id="addPrez" role="form">
+                <div class="form-group">
 
-        <form id="addPrez" role="form">
-            <div class="form-group">
-
-                <label for="title">Presentation title</label>
-                <input type="text" class="form-control" id="title" placeholder="title of the new presentation" />
-            </div>
-            <button type="submit" class="btn btn-default">new prez</button>
-        </form>
-
+                    <label for="title">Presentation title</label>
+                    <input type="text" class="form-control" id="title" placeholder="title of the new presentation" />
+                </div>
+                <button type="submit" class="btn btn-primary">new prez</button>
+            </form>
+        </div>
 
         <p>All the presentations so far</p>
-        {{#each prezs}} {{> presentation}} {{/each}}
+        {{#each allPresentations}} {{> presentationQuick}} {{/each}}
     </div>
 </template>
 
-<template name="presentation">
-    <div class="panel-primary panel">
+<template name="presentationQuick">
+    <div class="panel-default panel">
         <div class="panel-heading">
+            <h4>
             {{title}}
+        </h4>
         </div>
         <div class="panel-body">
             <p>

@@ -1,8 +1,10 @@
 Meteor.subscribe("presentations");
 
 Template.presentations.helpers({
-    prezs: function() {
-        return Presentations.find({ownerId : Meteor.userId()});
+    allPresentations: function() {
+        return Presentations.find({
+            ownerId: Meteor.userId()
+        });
     }
 });
 
@@ -16,8 +18,8 @@ Template.presentations.events({
         var title = event.target.title.value;
 
         Presentations.insert({
-        	owner : Meteor.user().profile.name,
-        	ownerId : Meteor.userId(),
+            owner: Meteor.user().profile.name,
+            ownerId: Meteor.userId(),
             title: title,
             createdAt: new Date() // current time
         });
