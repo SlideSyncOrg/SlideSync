@@ -1,4 +1,3 @@
-Meteor.subscribe("presentations");
 
 Template.presentations.helpers({
     allPresentations: function() {
