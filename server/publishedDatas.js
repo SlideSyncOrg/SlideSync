@@ -10,5 +10,16 @@ Meteor.publish("userData", function() {
 });
 
 Meteor.publish("presentations", function(){
-	return Presentations.find();
+	return Presentations.find({}, {
+		/*
+		sort: Sort specifier,
+		skip: Number,
+		limit: Number,
+		fields: Field specifier,
+		reactive: Boolean,
+		transform: Function
+		*/
+		//only get data the user own
+		ownerId: this.userId,
+	});
 });
