@@ -1,1 +1,1 @@
-See Githup page here: [http://ianrbuck.github.io/SlideSync](http://ianrbuck.github.io/SlideSync)
+See Githup page here: [http://slidesyncorg.github.io/SlideSync](http://slidesyncorg.github.io/SlideSync)
