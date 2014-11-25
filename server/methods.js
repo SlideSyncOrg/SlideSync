@@ -14,5 +14,18 @@ Meteor.methods({
 
         console.log("Remove a presentation callled " + presentationToDel.title)
         Presentations.remove(presentationToDel);
+    },
+
+
+    'addTimeline':function(parentPresId,name,visilibity){
+        //create a new timeline
+                Timelines.insert({
+            ownerId: Meteor.userId(),
+            title:'Main timeline',
+            visibility:['ownerOnly'],
+            parentPresentationId:idPresCreated,
+        }, callback);
+
+        //add the newly created timeline to the presentation
     }
 })
