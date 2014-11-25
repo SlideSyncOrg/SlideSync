@@ -1,4 +1,3 @@
-
 Template.presentations.helpers({
     allPresentations: function() {
         return Presentations.find({
@@ -12,11 +11,11 @@ Template.presentations.events({
     'submit #addPrez': function(event) {
 
 
-
         var title = event.target.title.value;
 
 
-        Meteor.call('insertPresentation',title);
+        Meteor.call('insertPresentation', title);
+
         // Clear form
         event.target.title.value = "";
 
@@ -30,7 +29,7 @@ Template.presentations.events({
     },
 
     'click #deleteBtn': function() {
-        Meteor.call('deletePresentation',this);
+        Meteor.call('deletePresentation', this);
     },
 
     'click #presentBtn': function(event) {
