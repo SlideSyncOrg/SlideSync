@@ -9,10 +9,12 @@ Meteor.methods({
             ownerId: Meteor.userId(),
             title: title,
             createdAt: new Date(), // current time
-            timeLines: [],
+            timelines: [],
+            states: []
         });
 
         Meteor.call('addTimeline', idPresCreated, 'Main timeline', 'ownerOnly')
+        Meteor.call('addState', idPresCreated)
     },
 
     'deletePresentation': function(presentationToDel) {
@@ -20,35 +22,35 @@ Meteor.methods({
         console.log("Remove a presentation called " + presentationToDel.title)
         Presentations.remove(presentationToDel);
 
-        console.log("Remove associated timelines")
-        Timelines.remove({
-            parentPresentationId: presentationToDel
-        });
-
-        console.log("Remove associated states")
-        States.remove({
-            parentPresentationId: presentationToDel
-        });
     },
 
 
-    'addTimeline': function(parentPresId, name, visilibity) {
+    'addTimeline': function(parentPresId, name) {
         console.log('Add a new timeline called ' + name + " to " + parentPresId)
-            //create a new timeline
-        var idNewTimeline = Timelines.insert({
-            ownerId: Meteor.userId(),
-            title: name,
-            visibility: visilibity,
-            parentPresentationId: parentPresId,
-        });
-
-        //add the newly created timeline to the presentation
+            //add the newly created timeline to the presentation
         Presentations.update({
             _id: parentPresId
         }, {
-            $addToSet: {
-                timeLines: idNewTimeline
+            $push: {
+                timelines: {
+                    title: name,
+                    pointerToSlide: ''
+                }
             }
         });
     },
+
+    'addState': function(parentPresId) {
+        Presentations.update({
+            _id: parentPresId
+        }, {
+            $push: {
+                states: {
+                    $each : [{
+                        pointerToSlide: ''
+                    }],
+                }
+            }
+        });
+    }
 })
