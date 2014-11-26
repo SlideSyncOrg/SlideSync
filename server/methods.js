@@ -22,12 +22,12 @@ Meteor.methods({
 
         console.log("Remove associated timelines")
         Timelines.remove({
-            ownerId: presentationToDel
+            parentPresentationId: presentationToDel
         });
 
         console.log("Remove associated states")
         States.remove({
-            ownerId: presentationToDel
+            parentPresentationId: presentationToDel
         });
     },
 
