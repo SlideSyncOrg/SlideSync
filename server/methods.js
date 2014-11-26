@@ -8,10 +8,11 @@ Meteor.methods({
             owner: Meteor.user().profile.name,
             ownerId: Meteor.userId(),
             title: title,
-            createdAt: new Date() // current time
+            createdAt: new Date(), // current time
+            timeLines: [],
         });
 
-
+        Meteor.call('addTimeline', idPresCreated, 'Main timeline', 'ownerOnly')
     },
 
     'deletePresentation': function(presentationToDel) {
@@ -21,15 +22,23 @@ Meteor.methods({
     },
 
 
-    'addTimeline':function(parentPresId,name,visilibity){
-        //create a new timeline
-                Timelines.insert({
+    'addTimeline': function(parentPresId, name, visilibity) {
+        console.log('Add a new timeline called ' + name + " to " + parentPresId)
+            //create a new timeline
+        var idNewTimeline = Timelines.insert({
             ownerId: Meteor.userId(),
-            title:'Main timeline',
-            visibility:['ownerOnly'],
-            parentPresentationId:idPresCreated,
-        }, callback);
+            title: name,
+            visibility: visilibity,
+            parentPresentationId: parentPresId,
+        });
 
         //add the newly created timeline to the presentation
-    }
+        Presentations.update({
+            _id: parentPresId
+        }, {
+            $addToSet: {
+                timeLines: idNewTimeline
+            }
+        });
+    },
 })
