@@ -7,4 +7,37 @@
     <p>
         Creation date : {{createdAt}}
     </p>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+            <th>#</th>
+                {{#each timelines}}
+                <th>
+                    <div>
+                        {{title}}
+                        <button type="button" class="btn btn-default addTimeline">add timeline</button>
+                    </div>
+                </th>
+                {{/each}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each states}}
+            <tr>
+            	<td>
+	            	index
+	            	<button type="button" class="btn btn-default addState">add state</button>
+	            </td>
+		            {{#each ../timelines}}
+		            <td>
+			            		preview of the slide ?
+		            </td>
+	            	{{/each}} 
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+
 </template>
