@@ -17,8 +17,18 @@ Meteor.methods({
 
     'deletePresentation': function(presentationToDel) {
 
-        console.log("Remove a presentation callled " + presentationToDel.title)
+        console.log("Remove a presentation called " + presentationToDel.title)
         Presentations.remove(presentationToDel);
+
+        console.log("Remove associated timelines")
+        Timelines.remove({
+            ownerId: presentationToDel
+        });
+
+        console.log("Remove associated states")
+        States.remove({
+            ownerId: presentationToDel
+        });
     },
 
 
