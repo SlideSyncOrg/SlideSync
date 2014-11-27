@@ -16,11 +16,12 @@ Meteor.methods({
             title: title,
             createdAt: new Date(), // current time
             timelines: [],
-            statesCount: -1
+            slides: [],
+            statesCount: 0
         });
-        
 
-        Meteor.call('addTimeline', idPresCreated, 'Main timeline', 'ownerOnly')
+
+        Meteor.call('addTimeline', idPresCreated, 'Main timeline')
         Meteor.call('addState', idPresCreated)
     },
 
@@ -35,28 +36,22 @@ Meteor.methods({
     'addTimeline': function(parentPresId, name) {
         console.log('Add a new timeline called ' + name + " to " + parentPresId)
             //add the newly created timeline to the presentation
-        Presentations.update(
-            {
+        Presentations.update({
             _id: parentPresId
-            }, 
-            {
-                $push: 
-                {
-                    
-                    timelines: 
-                    {
-                        title: name,
-                    }
+        }, {
+            $push: {
+
+                timelines: {
+                    title: name,
                 }
             }
-        );
-        for (x = 0; x <= Presentations.find({_id: parentPresId}).statesCount; x++) 
-        {
-            Presentations.update(
-                {
+        });
+        var prez = Presentations.findOne({_id: parentPresId}).statesCount
+        console.log(prez)
+        for (x = 0; x <= prez; x++) {
+            Presentations.update({
                 _id: parentPresId
-            }, 
-            {
+            }, {
                 $push: {
                     slides: {
                         timeline: name,
@@ -64,8 +59,7 @@ Meteor.methods({
                         content: null
                     }
                 }
-             }
-            );
+            });
         }
     },
 
@@ -73,7 +67,10 @@ Meteor.methods({
         Presentations.update({
             _id: parentPresId
         }, {
-            $inc: {statesCount: 1}
+            $inc: {
+                statesCount: 1
+            }
         });
+        //for each timeline add a new empty slide
     }
 })
