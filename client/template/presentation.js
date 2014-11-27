@@ -1,8 +1,8 @@
 Template.presentations.helpers({
     allPresentations: function() {
         return Presentations.find({
-            ownerId: Meteor.userId()
-        });
+            ownerId: Meteor.userId(),
+        }, {sort: {createdAt: -1}});
     }
 });
 

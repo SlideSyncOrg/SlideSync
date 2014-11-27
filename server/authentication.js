@@ -20,7 +20,6 @@ ServiceConfiguration.configurations.insert({
     secret: "HS1I9oNJg1yBVGj0aM_9ShK_"
 });
 
-
 Accounts.onCreateUser(function(options, user) {
     if (options.profile) {
         user.profile = options.profile;

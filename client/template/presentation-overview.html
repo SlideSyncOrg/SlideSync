@@ -8,6 +8,15 @@
         Creation date : {{createdAt}}
     </p>
 
+    <form id="addTimeline" role="form" class="form-inline">
+        <div class="form-group">
+
+            <label for="title">Timeline Name</label>
+            <input type="text" class="form-control" id="title" placeholder="title of the new timeline" required />
+            <button type="submit" class="btn btn-primary">New timeline</button>
+        </div>
+        
+    </form>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -16,14 +25,13 @@
                 <th>
                     <div>
                         {{title}}
-                        <button type="button" class="btn btn-default addTimeline">add timeline</button>
                     </div>
                 </th>
                 {{/each}}
             </tr>
         </thead>
         <tbody>
-            {{#each states}}
+            {{statesCount}}
             <tr>
             	<td>
 	            	index
@@ -35,7 +43,6 @@
 		            </td>
 	            	{{/each}} 
             </tr>
-            {{/each}}
         </tbody>
     </table>
 
