@@ -15,12 +15,16 @@
             <input type="text" class="form-control" id="title" placeholder="title of the new timeline" required />
             <button type="submit" class="btn btn-primary">New timeline</button>
         </div>
-        
+
     </form>
+    <p>
+
+        Number of states : {{this.statesCount}}
+    </p>
     <table class="table table-bordered">
         <thead>
             <tr>
-            <th>#</th>
+                <th>#</th>
                 {{#each timelines}}
                 <th>
                     <div>
@@ -31,20 +35,24 @@
             </tr>
         </thead>
         <tbody>
-            {{statesCount}}
+            {{#each gimmeStatesArray}}
+
             <tr>
-            	<td>
-	            	index
-	            	<button type="button" class="btn btn-default addState">add state</button>
-	            </td>
-		            {{#each ../timelines}}
-		            <td>
-			            		preview of the slide ?
-		            </td>
-	            	{{/each}} 
+                <td>
+                    {{index}}
+                    <button type="button" class="btn btn-default addState">add state</button>
+                </td>
+                {{#each ../timelines}}
+                <td>
+
+                    {{relatedSlide title ../index}}
+
+                </td>
+                {{/each}}
             </tr>
+            {{/each}}
         </tbody>
     </table>
-
+    {{gimmeStatesArray}}
 
 </template>
