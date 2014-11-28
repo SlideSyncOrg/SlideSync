@@ -1,0 +1,40 @@
+<template name="presentations">
+    <div class="container">
+        <div class="col-md-12">
+            <form id="addPrez" role="form">
+                <div class="form-group">
+
+                    <label for="title">Presentation title</label>
+                    <input type="text" class="form-control" id="title" placeholder="title of the new presentation" required />
+                </div>
+                <button type="submit" class="btn btn-primary">new prez</button>
+            </form>
+        </div>
+
+        <p>All the presentations so far</p>
+        {{#each allPresentations}} {{> presentationQuick}} {{/each}}
+    </div>
+</template>
+
+<template name="presentationQuick">
+    <div class="panel-default panel">
+        <div class="panel-heading">
+            <h4>
+            {{title}}
+        </h4>
+        </div>
+        <div class="panel-body">
+            <p>
+                Owner : {{owner}}
+            </p>
+            <p>
+                Creation date : {{createdAt}}
+            </p>
+            <div class="btn-group pull-right" role="toolbar">
+                <a href="{{pathFor 'presentation.show'}}" class="btn btn-default" id="editBtn">Edit</a>
+                <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                <button type="button" class="btn btn-success" id="presentBtn">Present</button>
+            </div>
+        </div>
+    </div>
+</template>

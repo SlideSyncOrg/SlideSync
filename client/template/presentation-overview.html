@@ -1,0 +1,58 @@
+<template name="presentationOverview">
+    This is the template for a presentation overview
+    <p>Here you should see the differents timelines and states</p>
+    <p>
+        Owner : {{owner}}
+    </p>
+    <p>
+        Creation date : {{createdAt}}
+    </p>
+
+    <form id="addTimeline" role="form" class="form-inline">
+        <div class="form-group">
+
+            <label for="title">Timeline Name</label>
+            <input type="text" class="form-control" id="title" placeholder="title of the new timeline" required />
+            <button type="submit" class="btn btn-primary">New timeline</button>
+        </div>
+
+    </form>
+    <p>
+
+        Number of states : {{this.statesCount}}
+    </p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                {{#each timelines}}
+                <th>
+                    <div>
+                        {{title}}
+                    </div>
+                </th>
+                {{/each}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each gimmeStatesArray}}
+
+            <tr>
+                <td>
+                    {{index}}
+                    <button type="button" class="btn btn-default addState">add state</button>
+                </td>
+                {{#each ../timelines}}
+                <td>
+
+                    {{relatedSlide title ../index}}
+
+                </td>
+                {{/each}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{gimmeStatesArray}}
+
+</template>
