@@ -47,7 +47,8 @@ Meteor.methods({
             }
         });
         var numStates = Presentations.findOne({_id: parentPresId}).statesCount
-        for (x = 0; x <= numStates; x++) {
+        for (x = 1; x <= numStates; x++) {
+            //var content = "This is the content for slide ""
             Presentations.update({
                 _id: parentPresId
             }, {
@@ -55,7 +56,7 @@ Meteor.methods({
                     slides: {
                         timeline: name,
                         state: x,
-                        content: null
+                        content: "This is the content for slide " + x + " of timeline " + name
                     }
                 }
             });
@@ -80,7 +81,7 @@ Meteor.methods({
                     slides: {
                         timeline: timelines[x].title,
                         state: numStates,
-                        content: null
+                        content: "This is the content for slide " + numStates + " of timeline " + timelines[x].title
                     }
                 }
             });
