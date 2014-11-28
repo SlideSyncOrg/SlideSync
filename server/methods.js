@@ -47,7 +47,6 @@ Meteor.methods({
             }
         });
         var numStates = Presentations.findOne({_id: parentPresId}).statesCount
-        //console.log(numStates)
         for (x = 0; x <= numStates; x++) {
             Presentations.update({
                 _id: parentPresId
@@ -73,8 +72,6 @@ Meteor.methods({
             }
         });
         var numStates = Presentations.findOne({_id: parentPresId}).statesCount;
-        console.log("Timelines length: " + timelines.length);
-        console.log("Timeline[x]: " + timelines[1]);
         for (x = 0; x < timelines.length; x++) {
             Presentations.update({
                 _id: parentPresId
