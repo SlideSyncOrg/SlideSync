@@ -2,18 +2,29 @@
 
     <div class="container">
 
-        <p>content and stuff !</p>
-        {{#if currentUser}}
-            <div>
-                username loged in : {{currentUser.profile.name}}
-            </div>
-
-            <pre>{{currentUser.profile}}</pre>
-            <span class="text">
-                There you are, authenticated user.
-            </span> 
+        <h1>Account Stats</h1>
+        
+        {{#if loggedIn}}
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Username:</td>
+                        <td>{{username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Possible info to display:</td>
+                        <td>
+                            <ul>
+                                <li>Number owned presentations</li>
+                                <li>Number slides</li>
+                                <li>Average slides per presentation</li>
+                                <li>Average timelines per presentation</li>
+                                <li>Analytics (viewship stats)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         {{/if}}
-
-
     </div>
 </template>
