@@ -23,29 +23,3 @@ Meteor.publish("presentations", function(){
 		ownerId: this.userId,
 	});
 });
-
-Meteor.publish("timelines", function () {
-	return Timelines.find({}, {
-		/*
-		sort: Sort specifier,
-		skip: Number,
-		limit: Number,
-		fields: Field specifier,
-		reactive: Boolean,
-		transform: Function
-		*/
-	});
-});
-
-Meteor.publish("states", function () {
-	return States.find({}, {
-		/*
-		sort: Sort specifier,
-		skip: Number,
-		limit: Number,
-		fields: Field specifier,
-		reactive: Boolean,
-		transform: Function
-		*/
-	});
-});

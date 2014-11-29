@@ -27,7 +27,7 @@ Template.presentationOverview.helpers({
             if (slide.timeline == timelineName && slide.state == state) {
                 console.log("slide found for parameter : " + timelineName + "  " + state);
                 console.log(slide);
-                founded =slide;
+                founded =slide.content;
             };
         });
         // console.log("find nothing")
