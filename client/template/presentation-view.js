@@ -13,7 +13,6 @@ Template.presentationView.helpers({
     
     'currentContent': function() {
         var content = "We got nothing";
-        console.log(Template.parentData(1));
         var timelineTitle = Template.parentData(1).timelines[0].title;
         var stateNumber = Template.parentData(1).currentState;
         console.log("Getting content for timeline " + timelineTitle + " and state " + stateNumber);
@@ -23,6 +22,10 @@ Template.presentationView.helpers({
             }
         });
         return content;
+    },
+    
+    'isOwner': function () {
+        return this.ownerId === Meteor.userId();
     }
 });
 
@@ -36,4 +39,4 @@ Template.presentationView.events({
         console.log("Previous Clicked.")
         Meteor.call('previousState', Template.parentData(1)._id);
     }
-})
+});
