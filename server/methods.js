@@ -3,6 +3,7 @@
 Meteor.methods({
     'insertPresentation': function(title) {
         //add a new presentation
+        //TODO: add a check to make sure the user is logged in
         console.log("Create a new presentation called " + title)
         var ownerPrettyName;
         if (Meteor.user().profile.name) {
@@ -17,7 +18,8 @@ Meteor.methods({
             createdAt: new Date(), // current time
             timelines: [],
             slides: [],
-            statesCount: 0
+            statesCount: 0,
+            currentState: 1
         });
 
 
@@ -26,7 +28,7 @@ Meteor.methods({
     },
 
     'deletePresentation': function(presentationToDel) {
-
+        //TODO: add a check to make sure the user is authorized
         console.log("Remove a presentation called " + presentationToDel.title)
         Presentations.remove(presentationToDel);
 
@@ -34,6 +36,7 @@ Meteor.methods({
 
 
     'addTimeline': function(parentPresId, name) {
+        //TODO: add a check to make sure the user is authorized
         console.log('Add a new timeline called ' + name + " to " + parentPresId)
             //add the newly created timeline to the presentation
         Presentations.update({
@@ -64,6 +67,7 @@ Meteor.methods({
     },
 
     'addState': function(parentPresId) {
+        //TODO: add a check to make sure the user is authorized
         var timelines = Presentations.findOne({_id: parentPresId}).timelines;
         Presentations.update({
             _id: parentPresId
@@ -86,5 +90,25 @@ Meteor.methods({
                 }
             });
         }
+    },
+    
+    'nextState': function(parentPresId) {
+        //TODO: add a check to make sure the user is authorized
+        //TODO: add a check to see if this is the last slide
+        Presentations.update({
+            _id: parentPresId
+        }, {
+            $inc: {currentState: 1}
+        });
+    },
+    
+    'previousState': function(parentPresId) {
+        //TODO: add a check to make sure the user is authorized
+        //TODO: add a check to see if this is the first slide
+        Presentations.update({
+            _id: parentPresId
+        }, {
+            $inc: {currentState: -1}
+        });
     }
 })

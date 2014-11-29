@@ -1,9 +1,11 @@
 <template name="presentationView">
     <p>You are viewing a slide!</p>
     
-    <p>You are user {{owner}}</p>
+    <p>Owner is {{owner}}</p>
     
     <p>Timeline: {{currentTimeline}}</p>
     <p>State: {{currentState}}</p>
-    <p>Content: {{currentContent "Main timeline" 1}}</p>
+    <p>Content: {{currentContent}}</p>
+    <button id="previousState">Prev</button>
+    <button id="nextState">Next</button>
 </template>
