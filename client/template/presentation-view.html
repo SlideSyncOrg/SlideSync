@@ -1,13 +1,29 @@
 <template name="presentationView">
-    <p>You are viewing a slide!</p>
-    
-    <p>Owner is {{owner}}</p>
-    
-    <p>Timeline: {{currentTimeline}}</p>
-    <p>State: {{currentState}}</p>
-    <p>Content: {{currentContent}}</p>
-    {{#if isOwner}}
-        <button id="previousState">Prev</button>
-        <button id="nextState">Next</button>
-    {{/if}}
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <h1>
+        	
+            Hello
+        </h1>
+            <button id="toggleSidebar" class="btn btn-default">toggle sidebar</button>
+        </div>
+
+        <div id="page-content-wrapper">
+            <p>You are viewing a slide!</p>
+
+            <p>Owner is {{owner}}</p>
+
+            <p>Timeline: {{currentTimeline}}</p>
+            <p>State: {{currentState}}</p>
+            <p>Content: {{currentContent}}</p>
+
+            {{#if isOwner}}
+            <button id="previousState">Prev</button>
+            <button id="nextState">Next</button>
+            {{/if}}
+        </div>
+    </div>
 </template>
+
+t
