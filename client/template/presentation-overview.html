@@ -1,18 +1,24 @@
 <template name="presentationOverview">
-    <h1>{{title}}</h1>
-    
-    <p>Owner : {{owner}}</p>
-    
-    <p>Creation date : {{createdAt}}</p>
+    <div class="col-md-6">
 
-    <form id="addTimeline" role="form" class="form-inline">
-        <div class="form-group">
-            <label for="title">Timeline Name</label>
-            <input type="text" class="form-control" id="title" placeholder="Title of the new timeline" required />
-            <button type="submit" class="btn btn-primary">New timeline</button>
-        </div>
-    </form>
-    
+        <h1>{{title}}</h1>
+
+        <p>Owner : {{owner}}</p>
+
+        <p>Creation date : {{createdAt}}</p>
+    </div>
+    <div class="col-md-6">
+        {{>qrcode stringToRender="ceci est un test" size=150}}
+    </div>
+    <div class="col-md-12">
+        <form id="addTimeline" role="form" class="form-inline">
+            <div class="form-group">
+                <label for="title">Timeline Name</label>
+                <input type="text" class="form-control" id="title" placeholder="Title of the new timeline" required />
+                <button type="submit" class="btn btn-primary">New timeline</button>
+            </div>
+        </form>
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -45,7 +51,7 @@
             {{/each}}
         </tbody>
     </table>
-    
+
     <button type="button" class="btn btn-default addState">Add state</button>
 
 </template>
