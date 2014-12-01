@@ -8,8 +8,6 @@ example of call (in html ) :
 */
 Template.qrcode.rendered = function () {
 	
-	console.log(this.data);
-
     var qrcodesvg = new Qrcodesvg(this.data.stringToRender, document.getElementById("qrcode"), this.data.size);
 
     qrcodesvg.draw();
