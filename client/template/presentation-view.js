@@ -3,20 +3,21 @@ Template.presentationView.helpers({
                                                     //TODO: figure out how to extract the timeline
                                                     //from the view URL. The router has a var 'timeline'
                                                     //but I do not know how to access it here.
-        return this.timelines[0].title;
+        // return this.templateData.timelines[0].title;
+        return this.presentation.timelines[this.timelineIndex].title;
     },
     
     'currentState': function() {
         //return state;
-        return Template.parentData(1).currentState;
+        return this.presentation.currentState;
     },
     
     'currentContent': function() {
         var content = "We got nothing";
-        var timelineTitle = Template.parentData(1).timelines[0].title;
-        var stateNumber = Template.parentData(1).currentState;
+        var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
+        var stateNumber = this.presentation.currentState;
         console.log("Getting content for timeline " + timelineTitle + " and state " + stateNumber);
-        Template.parentData(1).slides.forEach(function(slide) {
+        this.presentation.slides.forEach(function(slide) {
             if (slide.timeline == timelineTitle && slide.state == stateNumber) {
                 content = slide.content;
             }
@@ -25,18 +26,22 @@ Template.presentationView.helpers({
     },
     
     'isOwner': function () {
-        return this.ownerId === Meteor.userId();
+        return this.presentation.ownerId === Meteor.userId();
     }
 });
 
 Template.presentationView.events({
     'click #nextState': function(event) {
         console.log("Next clicked.")
-        Meteor.call('nextState', Template.parentData(1)._id);
+        Meteor.call('nextState', this._id);
     },
     
     'click #previousState': function(event) {
         console.log("Previous Clicked.")
-        Meteor.call('previousState', Template.parentData(1)._id);
+        Meteor.call('previousState', this._id);
+    },
+
+    'click #toggleSidebar':function(event){
+        $("#wrapper").toggleClass("toggled");
     }
 });

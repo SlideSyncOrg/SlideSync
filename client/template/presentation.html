@@ -33,7 +33,10 @@
             <div class="btn-group pull-right" role="toolbar">
                 <a href="{{pathFor 'presentation.show'}}" class="btn btn-default" id="editBtn">Edit</a>
                 <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-                <a href="{{pathFor 'presentation.view'}}" class="btn btn-success" id="presentBtn">Present</a>
+                <a href="
+                {{#with _id=_id timeline=0}}
+                    {{pathFor 'presentation.view'}}
+                {{/with}}" class="btn btn-success" id="presentBtn">Present</a>
             </div>
         </div>
     </div>
