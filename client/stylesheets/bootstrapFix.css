@@ -1,16 +1,8 @@
-body {
+.navbarFixed {
     padding-top: 60px;
-    /* Margin bottom by footer height */
-    
-    margin-bottom: 60px;
 }
-@media (max-width: 979px) {
-    body {
-        padding-top: 60px;
-        /* Margin bottom by footer height */
-        
-        margin-bottom: 60px;
-    }
+.footerFixed {
+    margin-bottom: 60px;
 }
 .footer {
     position: absolute;
