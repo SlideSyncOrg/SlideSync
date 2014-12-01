@@ -13,4 +13,5 @@ service-configuration
 accounts-github
 gfk:notifications
 accounts-password
+mrt:qrcodesvg
 
