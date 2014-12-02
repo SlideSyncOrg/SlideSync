@@ -29,7 +29,9 @@ Template.presentationView.helpers({
         return this.presentation.ownerId === Meteor.userId();
     },
     
-
+    'owner': function () {
+        return this.presentation.owner;
+    }
 });
 
 Template.presentationView.events({
