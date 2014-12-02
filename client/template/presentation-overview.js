@@ -16,18 +16,18 @@ Template.presentationOverview.helpers({
     },
 
     'relatedSlide': function(timelineName, state) {
-        console.log("Call to the relatedSlide function")
-        console.log(timelineName);
-        console.log(state);
+        // console.log("Call to the relatedSlide function")
+        // console.log(timelineName);
+        // console.log(state);
 
 
-        var founded='nothing';
+        var founded = 'nothing';
         //BAAAAAAD should not be related to from where you called the function
         Template.parentData(2).slides.forEach(function(slide) {
             if (slide.timeline == timelineName && slide.state == state) {
-                console.log("slide found for parameter : " + timelineName + "  " + state);
-                console.log(slide);
-                founded =slide.content;
+                // console.log("slide found for parameter : " + timelineName + "  " + state);
+                // console.log(slide);
+                founded = slide.content;
             };
         });
         // console.log("find nothing")
