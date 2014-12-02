@@ -1,3 +1,9 @@
+Template.presentationOverview.created = function () {
+    //when the template is created, store the presentation object in session
+    Session.set("thePrez", this.data);
+};
+
+
 Template.presentationOverview.helpers({
     'gimmeStatesArray': function() {
         //generated an array of sized statesCount containing [1,2,3,...]
@@ -22,8 +28,8 @@ Template.presentationOverview.helpers({
 
 
         var founded = 'nothing';
-        //BAAAAAAD should not be related to from where you called the function
-        Template.parentData(2).slides.forEach(function(slide) {
+
+        Session.get('thePrez').slides.forEach(function(slide) {
             if (slide.timeline == timelineName && slide.state == state) {
                 // console.log("slide found for parameter : " + timelineName + "  " + state);
                 // console.log(slide);
@@ -49,15 +55,14 @@ Template.presentationOverview.helpers({
 
 Template.presentationOverview.events({
     'click .addState': function(event) {
-
-        Meteor.call('addState', Template.parentData(1)._id);
+        Meteor.call('addState', Session.get('thePrez')._id);
     },
 
     'submit #addTimeline': function(event) {
         var title = event.target.title.value;
 
 
-        Meteor.call('addTimeline', this._id, title);
+        Meteor.call('addTimeline', Session.get('thePrez')._id, title);
 
         // Clear form
         event.target.title.value = "";
