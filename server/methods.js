@@ -1,17 +1,23 @@
 //This file contain the API of the application
 
-Meteor.methods({
-    'insertPresentation': function(title) {
+Meteor.methods(
+{
+    'insertPresentation': function(title)
+    {
         //add a new presentation
         //TODO: add a check to make sure the user is logged in
         console.log("Create a new presentation called " + title)
         var ownerPrettyName;
-        if (Meteor.user().profile.name) {
+        if (Meteor.user().profile.name)
+        {
             ownerPrettyName = Meteor.user().profile.name;
-        } else {
+        }
+        else
+        {
             ownerPrettyName = Meteor.user().emails[0].address;
         }
-        var idPresCreated = Presentations.insert({
+        var idPresCreated = Presentations.insert(
+        {
             owner: ownerPrettyName,
             ownerId: Meteor.userId(),
             title: title,
@@ -27,7 +33,8 @@ Meteor.methods({
         Meteor.call('addState', idPresCreated)
     },
 
-    'deletePresentation': function(presentationToDel) {
+    'deletePresentation': function(presentationToDel)
+    {
         //TODO: add a check to make sure the user is authorized
         console.log("Remove a presentation called " + presentationToDel.title)
         Presentations.remove(presentationToDel);
@@ -35,30 +42,41 @@ Meteor.methods({
     },
 
 
-    'addTimeline': function(parentPresId, name) {
+    'addTimeline': function(parentPresId, name)
+    {
         //TODO: add a check to make sure the user is authorized
         console.log('Add a new timeline called ' + name + " to " + parentPresId)
             //add the newly created timeline to the presentation
-        Presentations.update({
+        Presentations.update(
+        {
             _id: parentPresId
-        }, {
-            $push: {
+        },
+        {
+            $push:
+            {
 
-                timelines: {
+                timelines:
+                {
                     title: name,
                 }
             }
         });
-        var numStates = Presentations.findOne({
+        var numStates = Presentations.findOne(
+        {
             _id: parentPresId
         }).statesCount
-        for (x = 1; x <= numStates; x++) {
+        for (x = 1; x <= numStates; x++)
+        {
             //var content = "This is the content for slide ""
-            Presentations.update({
+            Presentations.update(
+            {
                 _id: parentPresId
-            }, {
-                $push: {
-                    slides: {
+            },
+            {
+                $push:
+                {
+                    slides:
+                    {
                         timeline: name,
                         state: x,
                         content: "This is the content for slide " + x + " of timeline " + name
@@ -68,27 +86,38 @@ Meteor.methods({
         }
     },
 
-    'addState': function(parentPresId) {
+    'addState': function(parentPresId)
+    {
         //TODO: add a check to make sure the user is authorized
-        var timelines = Presentations.findOne({
+        var timelines = Presentations.findOne(
+        {
             _id: parentPresId
         }).timelines;
-        Presentations.update({
+        Presentations.update(
+        {
             _id: parentPresId
-        }, {
-            $inc: {
+        },
+        {
+            $inc:
+            {
                 statesCount: 1
             }
         });
-        var numStates = Presentations.findOne({
+        var numStates = Presentations.findOne(
+        {
             _id: parentPresId
         }).statesCount;
-        for (x = 0; x < timelines.length; x++) {
-            Presentations.update({
+        for (x = 0; x < timelines.length; x++)
+        {
+            Presentations.update(
+            {
                 _id: parentPresId
-            }, {
-                $push: {
-                    slides: {
+            },
+            {
+                $push:
+                {
+                    slides:
+                    {
                         timeline: timelines[x].title,
                         state: numStates,
                         content: "This is the content for slide " + numStates + " of timeline " + timelines[x].title
@@ -99,22 +128,30 @@ Meteor.methods({
 
     },
 
-    'nextState': function(parentPresId) {
+    'nextState': function(parentPresId)
+    {
 
         //find this presentation
-        var thePres = Presentations.findOne({
+        var thePres = Presentations.findOne(
+        {
             _id: parentPresId
         });
         //if you try to inc the current state beyond the maximum
-        if (thePres.currentState >= thePres.statesCount) {
+        if (thePres.currentState >= thePres.statesCount)
+        {
             //do nothing
             return false;
-        } else {
+        }
+        else
+        {
             //common case
-            Presentations.update({
+            Presentations.update(
+            {
                 _id: parentPresId
-            }, {
-                $inc: {
+            },
+            {
+                $inc:
+                {
                     currentState: 1
                 }
             });
@@ -123,22 +160,30 @@ Meteor.methods({
 
     },
 
-    'previousState': function(parentPresId) {
+    'previousState': function(parentPresId)
+    {
 
         //find this presentation
-        var thePres = Presentations.findOne({
+        var thePres = Presentations.findOne(
+        {
             _id: parentPresId
         });
         //if you try to decrease the currentstate bellow 1
-        if (thePres.currentState <= 1) {
+        if (thePres.currentState <= 1)
+        {
             //do nothing
             return false;
-        } else {
+        }
+        else
+        {
             //common case
-            Presentations.update({
+            Presentations.update(
+            {
                 _id: parentPresId
-            }, {
-                $inc: {
+            },
+            {
+                $inc:
+                {
                     currentState: -1
                 }
             });
@@ -148,16 +193,22 @@ Meteor.methods({
 
     },
 
-    'shortenUrl': function(urlToShorten) {
+    'shortenUrl': function(urlToShorten)
+    {
         //WIP
-        res = Meteor.http.post('https://www.googleapis.com/urlshortener/v1/url', {
-            data: {
-                'longUrl': urlToShorten,
-            },
-            query: {
-                'key': 'AIzaSyBKVJKtdqaai_naWHUpBljBfHpL2MAZC34'
+        res = Meteor.http.post(
+            'https://www.googleapis.com/urlshortener/v1/url',
+            {
+                data:
+                {
+                    'longUrl': urlToShorten,
+                },
+                query:
+                {
+                    'key': 'AIzaSyAM0EfKO2eTnworicmTspmv8JFj0K11zuI'
+                }
             }
-        });
+        );
         console.log(res.statusCode, res.data);
         return res.data.id
     },
