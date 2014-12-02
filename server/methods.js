@@ -49,7 +49,9 @@ Meteor.methods({
                 }
             }
         });
-        var numStates = Presentations.findOne({_id: parentPresId}).statesCount
+        var numStates = Presentations.findOne({
+            _id: parentPresId
+        }).statesCount
         for (x = 1; x <= numStates; x++) {
             //var content = "This is the content for slide ""
             Presentations.update({
@@ -68,7 +70,9 @@ Meteor.methods({
 
     'addState': function(parentPresId) {
         //TODO: add a check to make sure the user is authorized
-        var timelines = Presentations.findOne({_id: parentPresId}).timelines;
+        var timelines = Presentations.findOne({
+            _id: parentPresId
+        }).timelines;
         Presentations.update({
             _id: parentPresId
         }, {
@@ -76,7 +80,9 @@ Meteor.methods({
                 statesCount: 1
             }
         });
-        var numStates = Presentations.findOne({_id: parentPresId}).statesCount;
+        var numStates = Presentations.findOne({
+            _id: parentPresId
+        }).statesCount;
         for (x = 0; x < timelines.length; x++) {
             Presentations.update({
                 _id: parentPresId
@@ -89,26 +95,56 @@ Meteor.methods({
                     }
                 }
             });
-        }
+        };
+
     },
-    
+
     'nextState': function(parentPresId) {
-        //TODO: add a check to make sure the user is authorized
-        //TODO: add a check to see if this is the last slide
-        Presentations.update({
+
+        //find this presentation
+        var thePres = Presentations.findOne({
             _id: parentPresId
-        }, {
-            $inc: {currentState: 1}
         });
+            //if you try to inc the current state beyond the maximum
+        if (thePres.currentState >= thePres.statesCount) {
+            //do nothing
+            return false;
+        } else {
+            //common case
+            Presentations.update({
+                _id: parentPresId
+            }, {
+                $inc: {
+                    currentState: 1
+                }
+            });
+        };
+        //TODO: add a check to make sure the user is authorized
+
     },
-    
+
     'previousState': function(parentPresId) {
-        //TODO: add a check to make sure the user is authorized
-        //TODO: add a check to see if this is the first slide
-        Presentations.update({
+
+        //find this presentation
+        var thePres = Presentations.findOne({
             _id: parentPresId
-        }, {
-            $inc: {currentState: -1}
         });
-    }
+            //if you try to decrease the currentstate bellow 1
+        if (thePres.currentState <= 1) {
+            //do nothing
+            return false;
+        } else {
+            //common case
+            Presentations.update({
+                _id: parentPresId
+            }, {
+                $inc: {
+                    currentState: -1
+                }
+            });
+        };
+
+        //TODO: add a check to make sure the user is authorized
+
+    },
 })
