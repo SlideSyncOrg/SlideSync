@@ -203,13 +203,15 @@ Meteor.methods(
                 {
                     'longUrl': urlToShorten,
                 },
-                query:
+                //I do not succeed to make it work
+                // query: 'key=AIzaSyAM0EfKO2eTnworicmTspmv8JFj0K11zuI',
+                headers:
                 {
-                    'key': 'AIzaSyAM0EfKO2eTnworicmTspmv8JFj0K11zuI'
+                    'Content-Type': 'application/json'
                 }
             }
         );
-        console.log(res.statusCode, res.data);
+        // console.log(res.statusCode, res.data);
         return res.data.id
     },
 })
