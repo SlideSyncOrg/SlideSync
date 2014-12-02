@@ -105,7 +105,7 @@ Meteor.methods({
         var thePres = Presentations.findOne({
             _id: parentPresId
         });
-            //if you try to inc the current state beyond the maximum
+        //if you try to inc the current state beyond the maximum
         if (thePres.currentState >= thePres.statesCount) {
             //do nothing
             return false;
@@ -129,7 +129,7 @@ Meteor.methods({
         var thePres = Presentations.findOne({
             _id: parentPresId
         });
-            //if you try to decrease the currentstate bellow 1
+        //if you try to decrease the currentstate bellow 1
         if (thePres.currentState <= 1) {
             //do nothing
             return false;

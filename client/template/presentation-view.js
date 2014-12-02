@@ -27,7 +27,9 @@ Template.presentationView.helpers({
     
     'isOwner': function () {
         return this.presentation.ownerId === Meteor.userId();
-    }
+    },
+    
+
 });
 
 Template.presentationView.events({
