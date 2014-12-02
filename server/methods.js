@@ -147,4 +147,18 @@ Meteor.methods({
         //TODO: add a check to make sure the user is authorized
 
     },
+
+    'shortenUrl': function(urlToShorten) {
+        //WIP
+        res = Meteor.http.post('https://www.googleapis.com/urlshortener/v1/url', {
+            data: {
+                'longUrl': urlToShorten,
+            },
+            query: {
+                'key': 'AIzaSyBKVJKtdqaai_naWHUpBljBfHpL2MAZC34'
+            }
+        });
+        console.log(res.statusCode, res.data);
+        return res.data.id
+    },
 })

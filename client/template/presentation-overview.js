@@ -34,6 +34,15 @@ Template.presentationOverview.helpers({
         // throw new Meteor.error("No slide found for timeline: " + timelineName + "\n  state: " + state);
         return founded
 
+    },
+
+    'shortUrl': function() {
+        //async call
+        Meteor.call('shortenUrl', "http://korben.info/", function(error, result) {
+            //use reactivity of session variable to rerender the template when we get the value
+            Session.set('shortnedUrl', result);
+        });
+        return Session.get('shortnedUrl');
     }
 });
 
