@@ -23,7 +23,7 @@ Meteor.methods({
         });
 
 
-        Meteor.call('addTimeline', idPresCreated, 'Main timeline')
+        Meteor.call('addTimeline', idPresCreated, 'Main timeline', false)
         Meteor.call('addState', idPresCreated)
     },
 
@@ -35,7 +35,7 @@ Meteor.methods({
     },
 
 
-    'addTimeline': function(parentPresId, name) {
+    'addTimeline': function(parentPresId, name, public) {
         //TODO: add a check to make sure the user is authorized
         console.log('Add a new timeline called ' + name + " to " + parentPresId)
             //add the newly created timeline to the presentation
@@ -46,6 +46,7 @@ Meteor.methods({
 
                 timelines: {
                     title: name,
+                    isPublic: public
                 }
             }
         });

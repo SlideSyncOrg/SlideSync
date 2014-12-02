@@ -1,8 +1,5 @@
 Template.presentationView.helpers({
     'currentTimeline': function() {
-                                                    //TODO: figure out how to extract the timeline
-                                                    //from the view URL. The router has a var 'timeline'
-                                                    //but I do not know how to access it here.
         // return this.templateData.timelines[0].title;
         return this.presentation.timelines[this.timelineIndex].title;
     },
@@ -31,6 +28,10 @@ Template.presentationView.helpers({
     
     'owner': function () {
         return this.presentation.owner;
+    },
+    
+    'isAuthorized': function () {
+        return this.presentation.ownerId === Meteor.userId() || this.presentation.timelines[this.timelineIndex].isPublic;
     }
 });
 
