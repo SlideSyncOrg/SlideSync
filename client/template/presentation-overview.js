@@ -18,6 +18,7 @@ Template.presentationOverview.helpers({
     },
 
     'displayStateCount': function() {
+
         return this.statesCount;
     },
 
@@ -44,7 +45,7 @@ Template.presentationOverview.helpers({
 
     'shortUrl': function() {
         //async call
-        Meteor.call('shortenUrl', "http://korben.info/", function(error, result) {
+        Meteor.call('shortenUrl', window.location.href, function(error, result) {
             //use reactivity of session variable to rerender the template when we get the value
             Session.set('shortnedUrl', result);
         });
