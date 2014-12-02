@@ -23,17 +23,8 @@ Template.presentations.events({
         return false;
     },
 
-    'click #editBtn': function() {
-        console.log("edit this prez")
-        console.log(this.title)
-    },
-
     'click #deleteBtn': function() {
         Meteor.call('deletePresentation', this);
-    },
-
-    'click #presentBtn': function(event) {
-        console.log("present this prez")
     },
 
 });
