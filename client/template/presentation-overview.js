@@ -1,28 +1,35 @@
-Template.presentationOverview.created = function () {
+Template.presentationOverview.created = function()
+{
     //when the template is created, store the presentation object in session
     Session.set("thePrez", this.data);
 };
 
 
-Template.presentationOverview.helpers({
-    'gimmeStatesArray': function() {
+Template.presentationOverview.helpers(
+{
+    'gimmeStatesArray': function()
+    {
         //generated an array of sized statesCount containing [1,2,3,...]
         var N = this.statesCount;
         var res = [];
-        for (var i = 1; i <= N; i++) {
-            res.push({
+        for (var i = 1; i <= N; i++)
+        {
+            res.push(
+            {
                 index: i
             });
         }
         return res;
     },
 
-    'displayStateCount': function() {
+    'displayStateCount': function()
+    {
 
         return this.statesCount;
     },
 
-    'relatedSlide': function(timelineName, state) {
+    'relatedSlide': function(timelineName, state)
+    {
         // console.log("Call to the relatedSlide function")
         // console.log(timelineName);
         // console.log(state);
@@ -30,8 +37,10 @@ Template.presentationOverview.helpers({
 
         var founded = 'nothing';
 
-        Session.get('thePrez').slides.forEach(function(slide) {
-            if (slide.timeline == timelineName && slide.state == state) {
+        Session.get('thePrez').slides.forEach(function(slide)
+        {
+            if (slide.timeline == timelineName && slide.state == state)
+            {
                 // console.log("slide found for parameter : " + timelineName + "  " + state);
                 // console.log(slide);
                 founded = slide.content;
@@ -46,12 +55,15 @@ Template.presentationOverview.helpers({
 });
 
 
-Template.presentationOverview.events({
-    'click .addState': function(event) {
+Template.presentationOverview.events(
+{
+    'click .addState': function(event)
+    {
         Meteor.call('addState', Session.get('thePrez')._id);
     },
 
-    'submit #addTimeline': function(event) {
+    'submit #addTimeline': function(event)
+    {
         var title = event.target.title.value;
 
 
