@@ -169,7 +169,7 @@ Meteor.methods(
                         {
                             timeline: timelines[x].title,
                             state: numStates,
-                            content: "This is the content for slide " + numStates + " of timeline " + timelines[x].title
+                            content: "This is the <b>content</b> for slide " + numStates + " of timeline " + timelines[x].title
                         }
                     }
                 });
