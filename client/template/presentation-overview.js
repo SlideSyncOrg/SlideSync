@@ -1,7 +1,7 @@
 Template.presentationOverview.created = function()
 {
     //when the template is created, store the presentation object in session
-    Session.set("thePrez", this.data);
+    Session.set("thePrez", this.data._id);
 };
 
 
@@ -37,7 +37,7 @@ Template.presentationOverview.helpers(
 
         var founded = 'nothing';
 
-        Session.get('thePrez').slides.forEach(function(slide)
+        Presentations.findOne({_id: Session.get("thePrez")}).slides.forEach(function(slide)
         {
             if (slide.timeline == timelineName && slide.state == state)
             {
@@ -59,7 +59,7 @@ Template.presentationOverview.events(
 {
     'click .addState': function(event)
     {
-        Meteor.call('addState', Session.get('thePrez')._id);
+        Meteor.call('addState', Session.get('thePrez'));
     },
 
     'submit #addTimeline': function(event)
@@ -67,7 +67,7 @@ Template.presentationOverview.events(
         var title = event.target.title.value;
         var isPublic = event.target.isPublic.checked;
 
-        Meteor.call('addTimeline', Session.get('thePrez')._id, title, isPublic);
+        Meteor.call('addTimeline', Session.get('thePrez'), title, isPublic); //function(){
 
         // Clear form
         event.target.title.value = "";
