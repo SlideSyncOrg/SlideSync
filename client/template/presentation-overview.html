@@ -11,6 +11,10 @@
         {{>qrcode stringToRender=shortUrl size=150}}
         <h3>the short url : </h3>
         <a href="{{shortUrl}}">{{shortUrl}}</a>
+        <a href="
+            {{#with _id=_id timeline=0}}
+                {{pathFor 'presentation.view'}}
+            {{/with}}" class="btn btn-success" id="presentBtn">Present</a>
     </div>
     <div class="col-md-12">
         <form id="addTimeline" role="form" class="form-inline">
