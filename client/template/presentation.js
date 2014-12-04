@@ -1,4 +1,5 @@
 Template.presentations.helpers({
+    //Return all presentations user created, in reverse chronological order
     allPresentations: function() {
         return Presentations.find({
             ownerId: Meteor.userId(),
@@ -8,21 +9,21 @@ Template.presentations.helpers({
 
 
 Template.presentations.events({
+    //Create a new presentation
     'submit #addPrez': function(event) {
-
-
         var title = event.target.title.value;
-
-
+        
+        //Make call to server
         Meteor.call('insertPresentation', title);
 
-        // Clear form
+        //Clear form
         event.target.title.value = "";
 
-        //prevent the page to reload
+        //Prevent the page to reload
         return false;
     },
-
+    
+    //Delete presentation
     'click #deleteBtn': function() {
         Meteor.call('deletePresentation', this._id);
     },
