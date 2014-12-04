@@ -29,7 +29,7 @@ Template.presentations.events({
     },
 
     'click #deleteBtn': function() {
-        Meteor.call('deletePresentation', this);
+        Meteor.call('deletePresentation', this._id);
     },
 
     'click #presentBtn': function(event) {

@@ -3,9 +3,8 @@
 Meteor.methods({
     'insertPresentation': function(title) {
         //add a new presentation
-        //TODO: add a check to make sure the user is logged in
         if (!Meteor.user()) {
-            console.log("Someone tried to make a presentation without being logged in.");
+            console.log("Someone tried to make a presentation named " + title + " without being logged in.");
         } else {
             console.log("Create a new presentation called " + title)
             var ownerPrettyName;
@@ -31,23 +30,19 @@ Meteor.methods({
         }
     },
 
-    'deletePresentation': function(presentationToDel) {
-        //TODO: add a check to make sure the user is authorized
-        if (Meteor.userId() != presentationToDel.ownerId) {
-            console.log("Someone tried to delete a presentation they do not own.");
+    'deletePresentation': function(parentPresId) {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to delete " + parentPresId + " without being logged in.");
         } else {
-            console.log("Remove a presentation called " + presentationToDel.title)
-            Presentations.remove(presentationToDel);
+            console.log("Remove a presentation " + parentPresId)
+            Presentations.remove({_id: parentPresId});
         }
     },
 
 
     'addTimeline': function(parentPresId, name, public) {
-        //TODO: add a check to make sure the user is authorized
-        //var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId});
-        console.log("OwnerId: " + ownerId);
-        if (Meteor.userId() != ownerId) {
-            console.log("Someone tried to make a presentation without being logged in.");
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
         } else {
             console.log('Add a new timeline called ' + name + " to " + parentPresId)
                 //add the newly created timeline to the presentation
@@ -83,82 +78,93 @@ Meteor.methods({
     },
 
     'addState': function(parentPresId) {
-        //TODO: add a check to make sure the user is authorized
-        var timelines = Presentations.findOne({
-            _id: parentPresId
-        }).timelines;
-        Presentations.update({
-            _id: parentPresId
-        }, {
-            $inc: {
-                statesCount: 1
-            }
-        });
-        var numStates = Presentations.findOne({
-            _id: parentPresId
-        }).statesCount;
-        for (x = 0; x < timelines.length; x++) {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to add a state to " + parentPresId + " without being logged in.");
+        } else {
+            console.log("Add new state to " + parentPresId);
+            var timelines = Presentations.findOne({
+                _id: parentPresId
+            }).timelines;
             Presentations.update({
                 _id: parentPresId
             }, {
-                $push: {
-                    slides: {
-                        timeline: timelines[x].title,
-                        state: numStates,
-                        content: "This is the content for slide " + numStates + " of timeline " + timelines[x].title
-                    }
+                $inc: {
+                    statesCount: 1
                 }
             });
-        };
-
+            var numStates = Presentations.findOne({
+                _id: parentPresId
+            }).statesCount;
+            for (x = 0; x < timelines.length; x++) {
+                Presentations.update({
+                    _id: parentPresId
+                }, {
+                    $push: {
+                        slides: {
+                            timeline: timelines[x].title,
+                            state: numStates,
+                            content: "This is the content for slide " + numStates + " of timeline " + timelines[x].title
+                        }
+                    }
+                });
+            };
+        }
     },
 
     'nextState': function(parentPresId) {
-
-        //find this presentation
-        var thePres = Presentations.findOne({
-            _id: parentPresId
-        });
-            //if you try to inc the current state beyond the maximum
-        if (thePres.currentState >= thePres.statesCount) {
-            //do nothing
-            return false;
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to move forward in " + parentPresId);
         } else {
-            //common case
-            Presentations.update({
+            //find this presentation
+            console.log("Move forward in a presentation");
+            var thePres = Presentations.findOne({
                 _id: parentPresId
-            }, {
-                $inc: {
-                    currentState: 1
-                }
             });
-        };
-        //TODO: add a check to make sure the user is authorized
-
+                //if you try to inc the current state beyond the maximum
+            if (thePres.currentState >= thePres.statesCount) {
+                //do nothing
+                return false;
+            } else {
+                //common case
+                Presentations.update({
+                    _id: parentPresId
+                }, {
+                    $inc: {
+                        currentState: 1
+                    }
+                });
+            };
+        }
     },
 
     'previousState': function(parentPresId) {
-
-        //find this presentation
-        var thePres = Presentations.findOne({
-            _id: parentPresId
-        });
-            //if you try to decrease the currentstate bellow 1
-        if (thePres.currentState <= 1) {
-            //do nothing
-            return false;
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to move backwards in " + parentPresId);
         } else {
-            //common case
-            Presentations.update({
+            //find this presentation
+            console.log("Move backward in a presentation");
+            var thePres = Presentations.findOne({
                 _id: parentPresId
-            }, {
-                $inc: {
-                    currentState: -1
-                }
             });
-        };
-
-        //TODO: add a check to make sure the user is authorized
-
+                //if you try to decrease the currentstate bellow 1
+            if (thePres.currentState <= 1) {
+                //do nothing
+                return false;
+            } else {
+                //common case
+                Presentations.update({
+                    _id: parentPresId
+                }, {
+                    $inc: {
+                        currentState: -1
+                    }
+                });
+            };
+        }
     },
+    
+    'hasAccessToPresentation': function(parentPresId) {
+        var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId : 1, _id : 0}).ownerId;
+        return Meteor.userId() == ownerId;
+    }
 })
