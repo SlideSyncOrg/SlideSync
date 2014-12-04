@@ -33,6 +33,23 @@ Meteor.methods(
                 currentState: 1
             });
         }
+        else
+        {
+            ownerPrettyName = Meteor.user().emails[0].address;
+        }
+        var idPresCreated = Presentations.insert(
+        {
+            owner: ownerPrettyName,
+            ownerId: Meteor.userId(),
+            title: title,
+            createdAt: new Date(), // current time
+            timelines: [],
+            slides: [],
+            statesCount: 0,
+            currentState: 1
+        });
+
+
         Meteor.call('addTimeline', idPresCreated, 'Main timeline')
         Meteor.call('addState', idPresCreated)
         Meteor.call('addShortenUrl', idPresCreated)
@@ -168,12 +185,6 @@ Meteor.methods(
             var thePres = Presentations.findOne(
             {
                 _id: parentPresId
-            },
-            {
-                $inc:
-                {
-                    currentState: 1
-                }
             });
             //if you try to inc the current state beyond the maximum
             if (thePres.currentState >= thePres.statesCount)
@@ -270,17 +281,9 @@ Meteor.methods(
             }
         });
     },
-
-    'hasAccessToPresentation': function(parentPresId)
-    {
-        var ownerId = Presentations.findOne(
-        {
-            _id: parentPresId
-        },
-        {
-            ownerId: 1,
-            _id: 0
-        }).ownerId;
+    
+    'hasAccessToPresentation': function(parentPresId) {
+        var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId : 1, _id : 0}).ownerId;
         return Meteor.userId() == ownerId;
     }
 })
