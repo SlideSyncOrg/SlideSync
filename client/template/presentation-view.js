@@ -42,10 +42,10 @@ Template.presentationView.helpers(
 
         console.log('try to render html')
 
-/*        var d = document.getElementById("slideContent");
-        d.innerHTML = content;*/
-        var htmlObj = $(content);
-        htmlObj.find("#slideContent").html();
+        /*        var d = document.getElementById("slideContent");
+                d.innerHTML = content;*/
+        // var htmlObj = $(content);
+        // htmlObj.find("#slideContent").html();
 
         return content;
     },
@@ -71,10 +71,6 @@ Template.presentationView.helpers(
         return Session.get("sideBarHided");
     },
 
-    'isAuthorized': function () {
-        return this.presentation.ownerId === Meteor.userId() || this.presentation.timelines[this.timelineIndex].isPublic;
-    }
-    
 });
 
 Template.presentationView.events(
@@ -94,5 +90,6 @@ Template.presentationView.events(
     'click #toggleSidebar': function(event)
     {
         $("#wrapper").toggleClass("toggled");
+        Session.set("sideBarHided", !Session.get("sideBarHided"));
     }
 });
