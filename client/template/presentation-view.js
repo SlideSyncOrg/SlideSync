@@ -1,3 +1,14 @@
+Template.presentationView.created = function()
+{
+
+    Session.set("sideBarHided", false);
+
+    //when the template is created, store the presentation object in session
+    Session.set("thePrez", this.data);
+
+    console.log(this.data)
+};
+
 Template.presentationView.helpers(
 {
     'currentTimeline': function()
@@ -5,7 +16,6 @@ Template.presentationView.helpers(
         //TODO: figure out how to extract the timeline
         //from the view URL. The router has a var 'timeline'
         //but I do not know how to access it here.
-
         // return this.templateData.timelines[0].title;
         return this.presentation.timelines[this.timelineIndex].title;
     },
@@ -32,10 +42,10 @@ Template.presentationView.helpers(
 
         console.log('try to render html')
 
-/*        var d = document.getElementById("slideContent");
-        d.innerHTML = content;*/
-        var htmlObj = $(content);
-        htmlObj.find("#slideContent").html();
+        /*        var d = document.getElementById("slideContent");
+                d.innerHTML = content;*/
+        // var htmlObj = $(content);
+        // htmlObj.find("#slideContent").html();
 
         return content;
     },
@@ -55,10 +65,12 @@ Template.presentationView.helpers(
 
         // return $('#one').html();
     },
-    
-    'isAuthorized': function () {
-        return this.presentation.ownerId === Meteor.userId() || this.presentation.timelines[this.timelineIndex].isPublic;
-    }
+
+    'isSidebarToggled': function()
+    {
+        return Session.get("sideBarHided");
+    },
+
 });
 
 Template.presentationView.events(
@@ -78,5 +90,6 @@ Template.presentationView.events(
     'click #toggleSidebar': function(event)
     {
         $("#wrapper").toggleClass("toggled");
+        Session.set("sideBarHided", !Session.get("sideBarHided"));
     }
 });
