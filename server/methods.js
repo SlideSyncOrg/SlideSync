@@ -33,21 +33,6 @@ Meteor.methods(
                 currentState: 1
             });
         }
-        else
-        {
-            ownerPrettyName = Meteor.user().emails[0].address;
-        }
-        var idPresCreated = Presentations.insert(
-        {
-            owner: ownerPrettyName,
-            ownerId: Meteor.userId(),
-            title: title,
-            createdAt: new Date(), // current time
-            timelines: [],
-            slides: [],
-            statesCount: 0,
-            currentState: 1
-        });
 
 
         Meteor.call('addTimeline', idPresCreated, 'Main timeline')
