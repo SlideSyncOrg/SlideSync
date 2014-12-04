@@ -4,9 +4,11 @@ Template.presentationView.created = function()
 
     //When the template is created, store the presentation object in session
     Session.set("thePrez", this.data.presentation);
-    
-    document.addEventListener('keydown', function(event) {
-        switch (event.keyCode) {
+
+    document.addEventListener('keydown', function(event)
+    {
+        switch (event.keyCode)
+        {
             case 39: // Right arrow
                 event.preventDefault();
                 Meteor.call('nextState', Session.get('thePrez')._id);
@@ -15,8 +17,8 @@ Template.presentationView.created = function()
                 event.preventDefault();
                 Meteor.call('previousState', Session.get('thePrez')._id);
                 break;
-          }
-        }, false);
+        }
+    }, false);
 };
 
 Template.presentationView.helpers(
@@ -37,7 +39,7 @@ Template.presentationView.helpers(
         var content = "We got nothing";
         var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
         var stateNumber = this.presentation.currentState;
-        
+
         //Go through slides array and find the one with current timeline and state
         this.presentation.slides.forEach(function(slide)
         {
@@ -46,13 +48,6 @@ Template.presentationView.helpers(
                 content = slide.content;
             }
         });
-
-        console.log('try to render html')
-
-        /*        var d = document.getElementById("slideContent");
-                d.innerHTML = content;*/
-        // var htmlObj = $(content);
-        // htmlObj.find("#slideContent").html();
 
         return content;
     },
@@ -66,8 +61,9 @@ Template.presentationView.helpers(
     {
         return Session.get('thePrez').owner;
     },
-    
-    'isAuthorized': function () {
+
+    'isAuthorized': function()
+    {
         return Session.get('thePrez').ownerId === Meteor.userId() || Session.get('thePrez').timelines[this.timelineIndex].isPublic;
     },
 
