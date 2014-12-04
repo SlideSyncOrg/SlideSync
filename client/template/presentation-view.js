@@ -4,6 +4,19 @@ Template.presentationView.created = function()
 
     //When the template is created, store the presentation object in session
     Session.set("thePrez", this.data.presentation);
+    
+    document.addEventListener('keydown', function(event) {
+        switch (event.keyCode) {
+            case 39: // Right arrow
+                event.preventDefault();
+                Meteor.call('nextState', Session.get('thePrez')._id);
+                break;
+            case 37: // Left arrow
+                event.preventDefault();
+                Meteor.call('previousState', Session.get('thePrez')._id);
+                break;
+          }
+        }, false);
 };
 
 Template.presentationView.helpers(

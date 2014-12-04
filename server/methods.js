@@ -188,7 +188,6 @@ Meteor.methods(
         }
         else
         {
-            console.log("Move forward in a presentation");
             //Find this presentation
             var thePres = Presentations.findOne(
             {
@@ -229,7 +228,6 @@ Meteor.methods(
         }
         else
         {
-            console.log("Move backward in a presentation");
             //Find this presentation
             var thePres = Presentations.findOne(
             {
