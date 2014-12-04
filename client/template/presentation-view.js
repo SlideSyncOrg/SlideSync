@@ -4,9 +4,9 @@ Template.presentationView.created = function()
     Session.set("sideBarHided", false);
 
     //when the template is created, store the presentation object in session
-    Session.set("thePrez", this.data);
+    Session.set("thePrez", this.data.presentation);
 
-    console.log(this.data)
+    console.log(this.data.presentation);
 };
 
 Template.presentationView.helpers(
@@ -52,12 +52,16 @@ Template.presentationView.helpers(
 
     'isOwner': function()
     {
-        return this.presentation.ownerId === Meteor.userId();
+        return Session.get('thePrez').ownerId === Meteor.userId();
     },
 
     'owner': function()
     {
-        return this.presentation.owner;
+        return Session.get('thePrez').owner;
+    },
+    
+    'isAuthorized': function () {
+        return Session.get('thePrez').ownerId === Meteor.userId() || Session.get('thePrez').timelines[this.timelineIndex].isPublic;
     },
 
     'renderContent': function()
