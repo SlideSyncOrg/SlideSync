@@ -2,9 +2,10 @@
 
 Meteor.methods(
 {
+    //Add a new presentation
     'insertPresentation': function(title)
     {
-        //add a new presentation
+        //Security check
         if (!Meteor.user())
         {
             console.log("Someone tried to make a presentation named " + title + " without being logged in.");
@@ -13,6 +14,8 @@ Meteor.methods(
         {
             console.log("Create a new presentation called " + title)
             var ownerPrettyName;
+            
+            //OAuth users have profile names, email/password users do not.
             if (Meteor.user().profile.name)
             {
                 ownerPrettyName = Meteor.user().profile.name;
@@ -21,6 +24,8 @@ Meteor.methods(
             {
                 ownerPrettyName = Meteor.user().emails[0].address;
             }
+            
+            //Initial database call to create presentation
             var idPresCreated = Presentations.insert(
             {
                 owner: ownerPrettyName,
@@ -35,13 +40,17 @@ Meteor.methods(
         }
 
 
+        //Add first timeline, state, and shortened URL
         Meteor.call('addTimeline', idPresCreated, 'Main timeline')
         Meteor.call('addState', idPresCreated)
         Meteor.call('addShortenUrl', idPresCreated)
     },
 
+
+    //Delete given presentation
     'deletePresentation': function(parentPresId)
     {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId))
         {
             console.log("Someone tried to delete " + parentPresId + " without being logged in.");
@@ -57,8 +66,10 @@ Meteor.methods(
     },
 
 
+    //Add a timeline with given name, public status to given presentation
     'addTimeline': function(parentPresId, name, public)
     {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId))
         {
             console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
@@ -66,7 +77,8 @@ Meteor.methods(
         else
         {
             console.log('Add a new timeline called ' + name + " to " + parentPresId)
-                //add the newly created timeline to the presentation
+            
+            //Database call to add timeline
             Presentations.update(
             {
                 _id: parentPresId
@@ -81,13 +93,14 @@ Meteor.methods(
                     }
                 }
             });
+            
+            //For each state, add a slide to the new timeline
             var numStates = Presentations.findOne(
             {
                 _id: parentPresId
             }).statesCount
             for (x = 1; x <= numStates; x++)
             {
-                //var content = "This is the content for slide ""
                 Presentations.update(
                 {
                     _id: parentPresId
@@ -108,8 +121,10 @@ Meteor.methods(
     },
 
 
+    //Add a state to the given presentation
     'addState': function(parentPresId)
     {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId))
         {
             console.log("Someone tried to add a state to " + parentPresId + " without being logged in.");
@@ -117,10 +132,14 @@ Meteor.methods(
         else
         {
             console.log("Add new state to " + parentPresId);
+            
+            //Get array of timelines
             var timelines = Presentations.findOne(
             {
                 _id: parentPresId
             }).timelines;
+            
+            //Increment total number of states, get that new total
             Presentations.update(
             {
                 _id: parentPresId
@@ -135,6 +154,8 @@ Meteor.methods(
             {
                 _id: parentPresId
             }).statesCount;
+            
+            //For each timeline, add new slide with new highest state
             for (x = 0; x < timelines.length; x++)
             {
                 Presentations.update(
@@ -157,29 +178,32 @@ Meteor.methods(
     },
 
 
+    //Advance to next state being presented
     'nextState': function(parentPresId)
     {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId))
         {
             console.log("Someone tried to move forward in " + parentPresId);
         }
         else
         {
-            //find this presentation
             console.log("Move forward in a presentation");
+            //Find this presentation
             var thePres = Presentations.findOne(
             {
                 _id: parentPresId
             });
-            //if you try to inc the current state beyond the maximum
+            
+            //Check if we are at last state
             if (thePres.currentState >= thePres.statesCount)
             {
-                //do nothing
+                //Do nothing
                 return false;
             }
             else
             {
-                //common case
+                //Common case
                 Presentations.update(
                 {
                     _id: parentPresId
@@ -195,29 +219,31 @@ Meteor.methods(
     },
 
 
+    //Go back to previous state being presented
     'previousState': function(parentPresId)
     {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId))
         {
             console.log("Someone tried to move backwards in " + parentPresId);
         }
         else
         {
-            //find this presentation
             console.log("Move backward in a presentation");
+            //Find this presentation
             var thePres = Presentations.findOne(
             {
                 _id: parentPresId
             });
-            //if you try to decrease the currentstate bellow 1
+            //Check if we are at first state
             if (thePres.currentState <= 1)
             {
-                //do nothing
+                //Do nothing
                 return false;
             }
             else
             {
-                //common case
+                //Common case
                 Presentations.update(
                 {
                     _id: parentPresId
@@ -232,13 +258,15 @@ Meteor.methods(
         }
     },
 
+    //Generate a shortened URL to make it easy for viewers to find presentation,
+    //as well as provide analytics
     'addShortenUrl': function(presId)
     {
         console.log("Compute the short url for the presentation : " + presId)
-            //hard coded path to view route for this presentation
+        //Hard coded path to view route for this presentation
         urlToView = 'presentations/' + presId + '/view';
 
-        //make the request to google url shortener api
+        //Make the request to google url shortener api
         res = Meteor.http.post(
             'https://www.googleapis.com/urlshortener/v1/url',
             {
@@ -254,7 +282,7 @@ Meteor.methods(
             }
         );
 
-        //find the presentation and update
+        //Find the presentation and insert short URL
         Presentations.update(
         {
             _id: presId
@@ -267,6 +295,7 @@ Meteor.methods(
         });
     },
     
+    //Helper funching for security checks
     'hasAccessToPresentation': function(parentPresId) {
         var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId : 1, _id : 0}).ownerId;
         return Meteor.userId() == ownerId;
