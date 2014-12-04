@@ -1,6 +1,8 @@
 <template name="presentationView">
     <div id="wrapper">
         <!-- Sidebar -->
+        {{#if isAuthorized}}
+        
         <div id="sidebar-wrapper">
 
             <ul class="sidebar-nav">
@@ -47,5 +49,10 @@
                 here goe the slide content
             </div>
         </div>
+        
+        {{else}}
+        <hi>Sorry, you are not authorized to view this slide. Please change to a different timeline or <a href="{{ pathFor 'home'}}">log in.</a></hi>
+        
+        {{/if}}
     </div>
 </template>

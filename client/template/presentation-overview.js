@@ -65,12 +65,13 @@ Template.presentationOverview.events(
     'submit #addTimeline': function(event)
     {
         var title = event.target.title.value;
+        var isPublic = event.target.isPublic.checked;
 
-
-        Meteor.call('addTimeline', Session.get('thePrez')._id, title);
+        Meteor.call('addTimeline', Session.get('thePrez')._id, title, isPublic);
 
         // Clear form
         event.target.title.value = "";
+        //event.target.isPublic.checked = off;
 
         //prevent the page to reload
         return false;

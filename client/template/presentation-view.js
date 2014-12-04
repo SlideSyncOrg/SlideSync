@@ -71,7 +71,10 @@ Template.presentationView.helpers(
         return Session.get("sideBarHided");
     },
 
+    'isAuthorized': function () {
+        return this.presentation.ownerId === Meteor.userId() || this.presentation.timelines[this.timelineIndex].isPublic;
     }
+    
 });
 
 Template.presentationView.events(
@@ -91,6 +94,5 @@ Template.presentationView.events(
     'click #toggleSidebar': function(event)
     {
         $("#wrapper").toggleClass("toggled");
-        Session.set("sideBarHided", !Session.get("sideBarHided"));
     }
 });
