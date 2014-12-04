@@ -1,3 +1,14 @@
+Template.presentationView.created = function()
+{
+
+    Session.set("sideBarHided", false);
+
+    //when the template is created, store the presentation object in session
+    Session.set("thePrez", this.data);
+
+    console.log(this.data)
+};
+
 Template.presentationView.helpers(
 {
     'currentTimeline': function()
@@ -53,6 +64,13 @@ Template.presentationView.helpers(
     {
 
         // return $('#one').html();
+    },
+
+    'isSidebarToggled': function()
+    {
+        return Session.get("sideBarHided");
+    },
+
     }
 });
 
@@ -73,5 +91,6 @@ Template.presentationView.events(
     'click #toggleSidebar': function(event)
     {
         $("#wrapper").toggleClass("toggled");
+        Session.set("sideBarHided", !Session.get("sideBarHided"));
     }
 });
