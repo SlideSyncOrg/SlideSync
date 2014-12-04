@@ -31,6 +31,7 @@ Meteor.methods(
 
         Meteor.call('addTimeline', idPresCreated, 'Main timeline')
         Meteor.call('addState', idPresCreated)
+        Meteor.call('addShortenUrl', idPresCreated)
     },
 
     'deletePresentation': function(presentationToDel)
@@ -193,25 +194,38 @@ Meteor.methods(
 
     },
 
-    'shortenUrl': function(urlToShorten)
+    'addShortenUrl': function(presId)
     {
-        //WIP
+        console.log("Compute the short url for the presentation : " + presId)
+            //hard coded path to view route for this presentation
+        urlToView = 'presentations/' + presId + '/view';
+
+        //make the request to google url shortener api
         res = Meteor.http.post(
             'https://www.googleapis.com/urlshortener/v1/url',
             {
                 data:
                 {
-                    'longUrl': urlToShorten,
+                    'longUrl': Meteor.absoluteUrl(urlToView),
                 },
-                //I do not succeed to make it work
-                // query: 'key=AIzaSyAM0EfKO2eTnworicmTspmv8JFj0K11zuI',
+                query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
                 headers:
                 {
                     'Content-Type': 'application/json'
                 }
             }
         );
-        // console.log(res.statusCode, res.data);
-        return res.data.id
+
+        //find the presentation and update
+        Presentations.update(
+        {
+            _id: presId
+        },
+        {
+            $set:
+            {
+                shortUrl: res.data.id
+            }
+        });
     },
 })
