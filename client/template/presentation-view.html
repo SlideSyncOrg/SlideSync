@@ -36,30 +36,32 @@
             </div>
         {{#if isAuthorized timelineIndex}}
             <div id="page-content-wrapper">
+                <div>
+                    {{#if isSidebarToggled}}
+                        <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-right"></span> 
+                    {{else}}
+                        <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-left"></span> 
+                    {{/if}}
+                </div>
+                <div>
+                    <iframe id="slideContentIframe" srcdoc="{{currentContent}}" width="800" height="600" scrolling="yes" align="top"></iframe>
 
-                {{#if isSidebarToggled}}
-                    <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-right"></span> 
-                {{else}}
-                    <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-left"></span> 
-                {{/if}}
+                    <p>You are viewing a slide!</p>
 
-                <p>You are viewing a slide!</p>
+                    <p>Owner is {{presentation.owner}}</p>
+                    <p>title is {{presentation.title}}</p>
 
-                <p>Owner is {{presentation.owner}}</p>
-                <p>title is {{presentation.title}}</p>
+                    <p>Timeline: {{currentTimeline}}</p>
+                    <p>State: {{currentState}}</p>
+                    <p>Content:{{currentContent}}</p>
 
-                <p>Timeline: {{currentTimeline}}</p>
-                <p>State: {{currentState}}</p>
-                <p>Content:{{currentContent}}</p>
+                    {{#if isOwner}}
+                        <button id="previousState">Prev</button>
+                        <button id="nextState">Next</button>
+                    {{/if}}
 
-                {{#if isOwner}}
-                    <button id="previousState">Prev</button>
-                    <button id="nextState">Next</button>
-                {{/if}}
-
-                <input type="hidden" id="hideAndSeek" />
-
-                <iframe id="slideContentIframe" srcdoc="{{currentContent}}"></iframe>
+                    <input type="hidden" id="hideAndSeek" />
+                </div>
             </div>
 
         {{else}}
