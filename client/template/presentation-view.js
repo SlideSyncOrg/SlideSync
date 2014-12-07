@@ -62,21 +62,24 @@ Template.presentationView.helpers(
         return Session.get('thePrez').owner;
     },
 
-    'isAuthorized': function()
+    'isAuthorized': function(currentTimelineIndex)
     {
-        return Session.get('thePrez').ownerId === Meteor.userId() || Session.get('thePrez').timelines[this.timelineIndex].isPublic;
-    },
-
-    'renderContent': function()
-    {
-
-        // return $('#one').html();
+        return Session.get('thePrez').ownerId === Meteor.userId() || Session.get('thePrez').timelines[currentTimelineIndex].isPublic;
     },
 
     'isSidebarToggled': function()
     {
         return Session.get("sideBarHided");
     },
+
+
+    'getUrlData': function() {
+        return {
+            _id:Session.get("thePrez")._id,
+            timeline:this.index
+        }
+    },
+
 
 });
 
@@ -96,5 +99,6 @@ Template.presentationView.events(
     {
         $("#wrapper").toggleClass("toggled");
         Session.set("sideBarHided", !Session.get("sideBarHided"));
-    }
+    },
+
 });
