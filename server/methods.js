@@ -272,7 +272,7 @@ Meteor.methods(
                 {
                     'longUrl': Meteor.absoluteUrl(urlToView),
                 },
-                query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
+                // query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
                 headers:
                 {
                     'Content-Type': 'application/json'
