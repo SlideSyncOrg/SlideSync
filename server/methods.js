@@ -41,7 +41,8 @@ Meteor.methods(
 
 
         //Add first timeline, state, and shortened URL
-        Meteor.call('addTimeline', idPresCreated, 'Main timeline')
+        Meteor.call('addTimeline', idPresCreated, 'Public timeline',true)
+        Meteor.call('addTimeline', idPresCreated, 'Main timeline',false)
         Meteor.call('addState', idPresCreated)
         Meteor.call('addShortenUrl', idPresCreated)
     },
