@@ -15,9 +15,19 @@
                     {{#if isAuthorized index }}
                         <li class="timelineLink">
                             {{#linkTo route='presentation.view' data=getUrlData}}
-                            {{value.title}}
-                            {{/linkTo}}
+                            <div>
+                                {{value.title}}
                             <!-- color code for public/private timeline -->
+                                <div class="pull-right">
+                                    {{#if value.isPublic}}
+                                    
+                                        <div class="label label-success">Public</div>
+                                    {{else}}
+                                        <div class="label label-warning">Private</div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            {{/linkTo}}
                         </li>
                     {{/if}}
                     {{/each}}

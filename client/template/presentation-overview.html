@@ -20,8 +20,8 @@
         <form id="addTimeline" role="form" class="form-inline">
             <div class="form-group">
                 <label for="title">Timeline Name</label>
-                <input type="text" class="form-control" id="title" placeholder="Title of the new timeline" required />
-                Publicly visible: <input type="checkbox" id="isPublic"/>
+                <input type="text" class="form-control" id="title" placeholder="Title of the new timeline" required /> Publicly visible:
+                <input type="checkbox" id="isPublic" />
                 <button type="submit" class="btn btn-primary">New timeline</button>
             </div>
         </form>
@@ -35,11 +35,13 @@
                     <div>
                         {{title}}
                         <p>{{#if isPublic}}
-                            Public
+
+                            <div class="label label-success">Public</div>
                             {{else}}
-                            Private
-                        {{/if}}</p>
-                        
+                            <div class="label label-warning">Private</div>
+                        {{/if}}
+                        </p>
+
                     </div>
                 </th>
                 {{/each}}
