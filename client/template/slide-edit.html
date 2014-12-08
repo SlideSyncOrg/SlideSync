@@ -1,0 +1,21 @@
+<template name="slideEdit">
+    <div class="container">
+        <!-- editor -->
+        <div class="col-md-6">
+            <h1>Editor</h1>
+            {{log}}
+            <textarea rows="30" cols="80" class="form-control" id="textAreaContent">
+                {{content}}
+            </textarea>
+            <button class="btn btn-default" id="submitChanges">Preview</button>
+        </div>
+        <!-- view result -->
+        <div class="col-md-6">
+            <h1>Result</h1>
+                            <div class="video-container">
+                    
+                    <iframe id="slideContentIframe" srcdoc="{{content}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen="" ></iframe>
+                </div>
+        </div>
+    </div>
+</template>
