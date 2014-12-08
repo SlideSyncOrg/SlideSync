@@ -8,7 +8,7 @@
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
                         <h1>
-                        {{presentation.title}}
+                        {{presentation.titleToDisplay}}
                         </h1>
                     </li>
                     {{#each addIndex presentation.timelines}}
@@ -16,7 +16,7 @@
                         <li class="timelineLink">
                             {{#linkTo route='presentation.view' data=getUrlData}}
                             <div>
-                                {{value.title}}
+                                {{value.titleToDisplay}}
                             <!-- color code for public/private timeline -->
                                 <div class="pull-right">
                                     {{#if value.isPublic}}
@@ -52,7 +52,7 @@
                     <p>You are viewing a slide!</p>
 
                     <p>Owner is {{presentation.owner}}</p>
-                    <p>title is {{presentation.title}}</p>
+                    <p>title is {{presentation.titleToDisplay}}</p>
 
                     <p>Timeline: {{currentTimeline}}</p>
                     <p>State: {{currentState}}</p>

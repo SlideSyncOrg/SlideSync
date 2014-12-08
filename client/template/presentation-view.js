@@ -25,7 +25,7 @@ Template.presentationView.helpers(
 {
     'currentTimeline': function()
     {
-        return this.presentation.timelines[this.timelineIndex].title;
+        return this.presentation.timelines[this.timelineIndex].titleToDisplay;
     },
 
     'currentState': function()
@@ -37,7 +37,7 @@ Template.presentationView.helpers(
     'currentContent': function()
     {
         var content = "We got nothing";
-        var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
+        var timelineTitle = this.presentation.timelines[this.timelineIndex].titleToDisplay;
         var stateNumber = this.presentation.currentState;
 
         //Go through slides array and find the one with current timeline and state
