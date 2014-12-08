@@ -31,8 +31,8 @@ Template.presentationOverview.helpers(
     'relatedSlide': function(timelineName, state)
     {
         var founded = 'nothing';
-        
-        //Search through slides array to find those with given timeline and state
+
+        /*  //Search through slides array to find those with given timeline and state
         Presentations.findOne({_id: Session.get("thePrez")}).slides.forEach(function(slide)
         {
             if (slide.timeline == timelineName && slide.state == state)
@@ -40,8 +40,15 @@ Template.presentationOverview.helpers(
                 founded = slide.content;
             };
         });
-        return founded
 
+        return founded*/
+        console.log("relatedslide parameters : ", Session.get("thePrez"), timelineName, state)
+        return Slides.findOne(
+        {
+            'parentPresId': Session.get("thePrez"),
+            'timeline': timelineName,
+            'state': state,
+        }).content;
     },
 
     'log':function(){

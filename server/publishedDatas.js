@@ -1,25 +1,47 @@
 // server
-Meteor.publish("userData", function() {
-    if (this.userId) {
-        return Meteor.users.find({
+Meteor.publish("userData", function()
+{
+    if (this.userId)
+    {
+        return Meteor.users.find(
+        {
             _id: this.userId
         });
-    } else {
+    }
+    else
+    {
         this.ready();
     }
 });
 
-Meteor.publish("presentations", function(){
-	return Presentations.find({}, {
-		/*
-		sort: Sort specifier,
-		skip: Number,
-		limit: Number,
-		fields: Field specifier,
-		reactive: Boolean,
-		transform: Function
-		*/
-		//only get data the user own
-		ownerId: this.userId,
-	});
+Meteor.publish("presentations", function()
+{
+    if (this.userId)
+    {
+        return Presentations.find(
+        {
+            //only get data the user own
+            'ownerId': this.userId
+        });
+    }
+    else
+    {
+        this.ready();
+    }
+});
+
+Meteor.publish("slides", function()
+{
+    if (this.userId)
+    {
+        return Slides.find(
+        {
+            //only get our data
+            'ownerId': this.userId
+        });
+    }
+    else
+    {
+        this.ready();
+    }
 });

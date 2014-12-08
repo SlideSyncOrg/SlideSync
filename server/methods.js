@@ -14,7 +14,7 @@ Meteor.methods(
         {
             console.log("Create a new presentation called " + title)
             var ownerPrettyName;
-            
+
             //OAuth users have profile names, email/password users do not.
             if (Meteor.user().profile.name)
             {
@@ -24,25 +24,25 @@ Meteor.methods(
             {
                 ownerPrettyName = Meteor.user().emails[0].address;
             }
-            
+
             //Initial database call to create presentation
             var idPresCreated = Presentations.insert(
             {
-                owner: ownerPrettyName,
-                ownerId: Meteor.userId(),
-                title: title,
-                createdAt: new Date(), // current time
-                timelines: [],
-                slides: [],
-                statesCount: 0,
-                currentState: 1
+                'owner': ownerPrettyName,
+                'ownerId': Meteor.userId(),
+                'titleToDisplay': title,
+                'title':slug(title),
+                'createdAt': new Date(), // current time
+                'timelines': [],
+                'statesCount': 0,
+                'currentState': 1
             });
         }
 
 
         //Add first timeline, state, and shortened URL
-        Meteor.call('addTimeline', idPresCreated, 'Public timeline',true)
-        Meteor.call('addTimeline', idPresCreated, 'Main timeline',false)
+        Meteor.call('addTimeline', idPresCreated, 'Public timeline', true)
+        Meteor.call('addTimeline', idPresCreated, 'Main timeline', false)
         Meteor.call('addState', idPresCreated)
         Meteor.call('addShortenUrl', idPresCreated)
     },
@@ -59,9 +59,19 @@ Meteor.methods(
         else
         {
             console.log("Remove a presentation " + parentPresId)
+                //Delete the parent object (with timeline and state)
             Presentations.remove(
             {
-                _id: parentPresId
+                '_id': parentPresId
+            });
+
+            //remove the slides child
+            Slides.remove(
+            {
+                'parentPresId': parentPresId
+            }, function(error, recordsRemoved)
+            {
+                console.log("and " + recordsRemoved + " attached slides")
             });
         }
     },
@@ -78,23 +88,24 @@ Meteor.methods(
         else
         {
             console.log('Add a new timeline called ' + name + " to " + parentPresId)
-            
-            //Database call to add timeline
+            sluggedName = slug(name)
+                //Database call to add timeline
             Presentations.update(
             {
-                _id: parentPresId
+                '_id': parentPresId
             },
             {
                 $push:
                 {
-                    timelines:
+                    'timelines':
                     {
-                        title: name,
-                        isPublic: public
+                        'title': sluggedName,
+                        'titleToDisplay': name,
+                        'isPublic': public
                     }
                 }
             });
-            
+
             //For each state, add a slide to the new timeline
             var numStates = Presentations.findOne(
             {
@@ -102,21 +113,12 @@ Meteor.methods(
             }).statesCount
             for (x = 1; x <= numStates; x++)
             {
-                Presentations.update(
-                {
-                    _id: parentPresId
-                },
-                {
-                    $push:
-                    {
-                        slides:
-                        {
-                            timeline: name,
-                            state: x,
-                            content: "This is the content for slide " + x + " of timeline " + name
-                        }
-                    }
-                });
+
+                Meteor.call('addSlide',
+                    parentPresId,
+                    sluggedName,
+                    x,
+                    "This is the <b>content</b> for slide " + x + " of timeline " + sluggedName);
             }
         }
     },
@@ -133,48 +135,60 @@ Meteor.methods(
         else
         {
             console.log("Add new state to " + parentPresId);
-            
+
             //Get array of timelines
             var timelines = Presentations.findOne(
             {
-                _id: parentPresId
+                '_id': parentPresId
             }).timelines;
-            
+
             //Increment total number of states, get that new total
             Presentations.update(
             {
-                _id: parentPresId
+                '_id': parentPresId
             },
             {
                 $inc:
                 {
-                    statesCount: 1
+                    'statesCount': 1
                 }
             });
-            var numStates = Presentations.findOne(
+
+            var numState = Presentations.findOne(
             {
-                _id: parentPresId
+                '_id': parentPresId
             }).statesCount;
-            
+
             //For each timeline, add new slide with new highest state
             for (x = 0; x < timelines.length; x++)
             {
-                Presentations.update(
-                {
-                    _id: parentPresId
-                },
-                {
-                    $push:
-                    {
-                        slides:
-                        {
-                            timeline: timelines[x].title,
-                            state: numStates,
-                            content: "This is the <b>content</b> for slide " + numStates + " of timeline " + timelines[x].title
-                        }
-                    }
-                });
+
+                Meteor.call('addSlide',
+                    parentPresId,
+                    timelines[x].title,
+                    numState,
+                    "This is the <b>content</b> for slide " + numState + " of timeline " + timelines[x].title);
             };
+        }
+    },
+
+    'addSlide': function(parentPresId, timelineSlugName, numState, content)
+    {
+        //Security check
+        if (!Meteor.user())
+        {
+            console.log("Someone tried to add a slide to " + parentPresId + " without being logged in.");
+        }
+        else
+        {
+            Slides.insert(
+            {
+                'ownerId': Meteor.userId(),
+                'parentPresId':parentPresId,
+                'timeline': timelineSlugName,
+                'state': numState,
+                'content': content
+            });
         }
     },
 
@@ -192,9 +206,9 @@ Meteor.methods(
             //Find this presentation
             var thePres = Presentations.findOne(
             {
-                _id: parentPresId
+                '_id': parentPresId
             });
-            
+
             //Check if we are at last state
             if (thePres.currentState >= thePres.statesCount)
             {
@@ -206,12 +220,12 @@ Meteor.methods(
                 //Common case
                 Presentations.update(
                 {
-                    _id: parentPresId
+                    '_id': parentPresId
                 },
                 {
                     $inc:
                     {
-                        currentState: 1
+                        'currentState': 1
                     }
                 });
             };
@@ -232,7 +246,7 @@ Meteor.methods(
             //Find this presentation
             var thePres = Presentations.findOne(
             {
-                _id: parentPresId
+                '_id': parentPresId
             });
             //Check if we are at first state
             if (thePres.currentState <= 1)
@@ -245,12 +259,12 @@ Meteor.methods(
                 //Common case
                 Presentations.update(
                 {
-                    _id: parentPresId
+                    '_id': parentPresId
                 },
                 {
                     $inc:
                     {
-                        currentState: -1
+                        'currentState': -1
                     }
                 });
             };
@@ -262,19 +276,19 @@ Meteor.methods(
     'addShortenUrl': function(presId)
     {
         console.log("Compute the short url for the presentation : " + presId)
-        //Hard coded path to view route for this presentation
+            //Hard coded path to view route for this presentation
         urlToView = 'presentations/' + presId + '/view';
 
         //Make the request to google url shortener api
         res = Meteor.http.post(
             'https://www.googleapis.com/urlshortener/v1/url',
             {
-                data:
+                'data':
                 {
                     'longUrl': Meteor.absoluteUrl(urlToView),
                 },
                 // query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
-                headers:
+                'headers':
                 {
                     'Content-Type': 'application/json'
                 }
@@ -284,19 +298,27 @@ Meteor.methods(
         //Find the presentation and insert short URL
         Presentations.update(
         {
-            _id: presId
+            '_id': presId
         },
         {
             $set:
             {
-                shortUrl: res.data.id
+                'shortUrl': res.data.id
             }
         });
     },
-    
+
     //Helper funching for security checks
-    'hasAccessToPresentation': function(parentPresId) {
-        var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId : 1, _id : 0}).ownerId;
+    'hasAccessToPresentation': function(parentPresId)
+    {
+        var ownerId = Presentations.findOne(
+        {
+            '_id': parentPresId
+        },
+        {
+            ownerId: 1,
+            _id: 0
+        }).ownerId;
         return Meteor.userId() == ownerId;
 
     'getSlide': function(presId, timelineName, stateNumber)
@@ -323,3 +345,25 @@ Meteor.methods(
 
     }
 })
+
+
+//useful function
+var slug = function(str)
+{
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+    var to = "aaaaaeeeeeiiiiooooouuuunc------";
+    for (var i = 0, l = from.length; i < l; i++)
+    {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
+};

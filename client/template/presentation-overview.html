@@ -1,7 +1,7 @@
 <template name="presentationOverview">
     <div class="col-md-6">
 
-        <h1>{{title}}</h1>
+        <h1>{{titleToDisplay}}</h1>
 
         <p>Owner : {{owner}}</p>
 
@@ -33,7 +33,7 @@
                 {{#each timelines}}
                 <th>
                     <div>
-                        {{title}}
+                        {{titleToDisplay}}
                         <p>{{#if isPublic}}
 
                             <div class="label label-success">Public</div>
