@@ -25,7 +25,7 @@ Template.presentationView.helpers(
 {
     'currentTimeline': function()
     {
-        return this.presentation.timelines[this.timelineIndex].title;
+        return this.presentation.timelines[this.timelineIndex].titleToDisplay;
     },
 
     'currentState': function()
@@ -40,7 +40,7 @@ Template.presentationView.helpers(
         var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
         var stateNumber = this.presentation.currentState;
 
-        //Go through slides array and find the one with current timeline and state
+/*        //Go through slides array and find the one with current timeline and state
         this.presentation.slides.forEach(function(slide)
         {
             if (slide.timeline == timelineTitle && slide.state == stateNumber)
@@ -49,7 +49,14 @@ Template.presentationView.helpers(
             }
         });
 
-        return content;
+        return content;*/
+
+        return Slides.findOne(
+        {
+            'parentPresId': Session.get("thePrez")._id,
+            'timeline': timelineTitle,
+            'state': stateNumber,
+        }).content;
     },
 
     'isOwner': function()
