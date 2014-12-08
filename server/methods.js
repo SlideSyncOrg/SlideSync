@@ -298,5 +298,28 @@ Meteor.methods(
     'hasAccessToPresentation': function(parentPresId) {
         var ownerId = Presentations.findOne({_id: parentPresId}, {ownerId : 1, _id : 0}).ownerId;
         return Meteor.userId() == ownerId;
+
+    'getSlide': function(presId, timelineName, stateNumber)
+    {
+        console.log("parameters", presId, timelineName, stateNumber)
+
+        prez = Presentations.findOne(
+        {
+            "_id": presId,
+        });
+
+        console.log("résultat intermédiaire : ", prez)
+        console.log("array of slides : ", prez.slides)
+
+        filteredResult = _.find(prez.slides, function(slideObject)
+        {
+            return slideObject.timeline == timelineName && slideObject.state == stateNumber
+        })
+
+        console.info("on trouve ça pour un slide chercher", filteredResult)
+
+        return filteredResult;
+    },
+
     }
 })
