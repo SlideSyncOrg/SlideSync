@@ -320,6 +320,7 @@ Meteor.methods(
             _id: 0
         }).ownerId;
         return Meteor.userId() == ownerId;
+    },
 
     'getSlide': function(presId, timelineName, stateNumber)
     {
@@ -343,6 +344,39 @@ Meteor.methods(
         return filteredResult;
     },
 
+    'updateSlideContent': function(presId, timelineName, stateNumber, newContent)
+    {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId))
+        {
+            console.log("Someone tried update slide content of ",presid, timelineName, stateNumber);
+        }
+        else
+        {
+
+            Presentations.update(
+            {
+                _id: parentPresId,
+                "slides":
+                {
+                    $elemMatch:
+                    {
+                        "timeline": timelineName,
+                        "state": stateNumber,
+                    }
+                }
+            },
+            {
+                $push:
+                {
+                    slides:
+                    {
+                        timeline: timelines[x].title,
+                        state: numStates,
+                        content: "This is the <b>content</b> for slide " + numStates + " of timeline " + timelines[x].title
+                    }
+                }
+            });
+        }
     }
 })
 
