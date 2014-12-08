@@ -59,7 +59,13 @@
                 <td>
 
                     {{relatedSlide title ../index}}
-
+                    <a href="
+            
+                {{pathFor 'slide.edit' data=getEditSlideUrlData}}
+            "  id="edit">Edit</a>
+            {{#with _id=_id timeline=title state=../index }}
+                
+            {{/with}}
                 </td>
                 {{/each}}
             </tr>
