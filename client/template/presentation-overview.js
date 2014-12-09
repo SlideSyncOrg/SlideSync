@@ -28,23 +28,9 @@ Template.presentationOverview.helpers(
         return this.statesCount;
     },
 
-    'relatedSlide': function(timelineName, state)
-    {
-        var founded = 'nothing';
+    'relatedSlide': function(timelineName, state) {
 
-        /*  //Search through slides array to find those with given timeline and state
-        Presentations.findOne({_id: Session.get("thePrez")}).slides.forEach(function(slide)
-        {
-            if (slide.timeline == timelineName && slide.state == state)
-            {
-                founded = slide.content;
-            };
-        });
-
-        return founded*/
-        console.log("relatedslide parameters : ", Session.get("thePrez"), timelineName, state)
-        return Slides.findOne(
-        {
+        return Slides.findOne({
             'parentPresId': Session.get("thePrez"),
             'timeline': timelineName,
             'state': state,
