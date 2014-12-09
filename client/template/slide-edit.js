@@ -10,7 +10,7 @@ Template.slideEdit.events(
 {
     'click #submitChanges': function(event)
     {
-        console.log(document.getElementById("textAreaContent").value)
-        Meteor.call('updateSlideContent', 1, function (error, result) {});
+        newContent = document.getElementById("textAreaContent").value
+        Meteor.call('updateSlideContent', this.parentPresId,this.timeline,this.state,newContent);
     },
 });
