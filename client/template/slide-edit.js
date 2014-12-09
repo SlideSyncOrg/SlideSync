@@ -4,6 +4,9 @@ Template.slideEdit.helpers(
     {
         console.log(this)
     },
+    'trimedContent':function() {
+    	return this.content.trim()
+    }
 });
 
 Template.slideEdit.events(
