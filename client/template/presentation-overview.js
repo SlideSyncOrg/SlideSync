@@ -54,14 +54,13 @@ Template.presentationOverview.helpers(
     'log':function(){
         console.log(this)
     },
-    'getEditSlideUrlData':function(){
-        console.log("coucou on tente de donner les bonnes données")
-        console.log("this",this)
-        console.log("le parent",Template.parentData(1))
-        return{
-            _id:Session.get("thePrez"),
-            timeline:this.title,
-            state:Template.parentData(1).index,
+
+    'getEditSlideUrlData': function() {
+        //simply format the data for the router
+        return {
+            _id: Session.get("thePrez"),
+            timeline: this.title,
+            state: Template.parentData(1).index,
         }
     }
 
