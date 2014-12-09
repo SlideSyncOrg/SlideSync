@@ -322,60 +322,19 @@ Meteor.methods(
         return Meteor.userId() == ownerId;
     },
 
-    'getSlide': function(presId, timelineName, stateNumber)
-    {
-        console.log("parameters", presId, timelineName, stateNumber)
+    'updateSlideContent': function(parentPresId, timelineName, stateNumber, newContent) {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
+        } else {
 
-        prez = Presentations.findOne(
-        {
-            "_id": presId,
-        });
-
-        console.log("résultat intermédiaire : ", prez)
-        console.log("array of slides : ", prez.slides)
-
-        filteredResult = _.find(prez.slides, function(slideObject)
-        {
-            return slideObject.timeline == timelineName && slideObject.state == stateNumber
-        })
-
-        console.info("on trouve ça pour un slide chercher", filteredResult)
-
-        return filteredResult;
-    },
-
-    'updateSlideContent': function(presId, timelineName, stateNumber, newContent)
-    {
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
-            console.log("Someone tried update slide content of ",presid, timelineName, stateNumber);
-        }
-        else
-        {
-
-            Presentations.update(
-            {
-                _id: parentPresId,
-                "slides":
-                {
-                    $elemMatch:
-                    {
-                        "timeline": timelineName,
-                        "state": stateNumber,
-                    }
-                }
-            },
-            {
-                $push:
-                {
-                    slides:
-                    {
-                        timeline: timelines[x].title,
-                        state: numStates,
-                        content: "This is the <b>content</b> for slide " + numStates + " of timeline " + timelines[x].title
-                    }
-                }
-            });
+            Slides.update({
+                'ownerId': Meteor.userId(),
+                'parentPresId': parentPresId,
+                'timeline': timelineName,
+                'state': parseInt(stateNumber)
+            }, {$set:{
+                'content':newContent
+            }});
         }
     }
 })
