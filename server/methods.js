@@ -353,7 +353,7 @@ Meteor.methods(
     },
     
     'storeImage': function(file) {
-        Images.insert({'data': file, 'binary': file.__proto__});
+        Images.insert({'data': file});
     }
 })
 

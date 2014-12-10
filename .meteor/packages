@@ -15,4 +15,5 @@ gfk:notifications
 accounts-password
 mrt:qrcodesvg
 http
+cfs:gridfs
 
