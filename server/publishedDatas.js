@@ -45,3 +45,7 @@ Meteor.publish("slides", function()
         this.ready();
     }
 });
+
+Meteor.publish("images", function() {
+    
+});

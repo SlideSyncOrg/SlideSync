@@ -79,34 +79,39 @@ Template.presentationOverview.events(
     
     //As found at https://gist.github.com/dariocravero/3922137
     'change #imageUpload': function(event) {
-        console.log("Upload an image")
-        _.each(event.srcElement.files, function(file) {
-            Meteor.saveFile(file, file.name);
+        console.log(event);
+        _.each(event.target.files, function(file) {
+            console.log(file);
+            Meteor.call('storeImage', file);
         });
     }
 });
 
 //As found at https://gist.github.com/dariocravero/3922137
-Meteor.saveFile = function(blob, name, path, type, callback) {
+Meteor.saveFile = function(blob, name, type, callback) {
   var fileReader = new FileReader(),
-    method, encoding = 'binary', type = type || 'binary';
+      method, encoding = 'binary',
+      type = type || 'binary';
   switch (type) {
-    case 'text':
-      // TODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
-      method = 'readAsText';
-      encoding = 'utf8';
-      break;
-    case 'binary': 
-      method = 'readAsBinaryString';
-      encoding = 'binary';
-      break;
-    default:
-      method = 'readAsBinaryString';
-      encoding = 'binary';
-      break;
+      case 'text':
+          // TODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
+          method = 'readAsText';
+          encoding = 'utf8';
+          break;
+      case 'binary':
+          method = 'readAsBinaryString';
+          encoding = 'binary';
+          break;
+      default:
+          method = 'readAsBinaryString';
+          encoding = 'binary';
+          break;
   }
+  var path = "/whatever/"
   fileReader.onload = function(file) {
-    Meteor.call('saveFile', file.srcElement.result, name, path, encoding, callback);
+      console.log(file);
+      //Meteor.call('saveFile', file.srcElement.result, name, path, encoding, callback);
+      Meteor.call('saveFile', blob, name, path, encoding, callback);
   }
   fileReader[method](blob);
 }

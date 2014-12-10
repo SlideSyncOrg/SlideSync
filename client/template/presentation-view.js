@@ -51,12 +51,16 @@ Template.presentationView.helpers(
 
         return content;*/
 
-        return Slides.findOne(
-        {
-            'parentPresId': Session.get("thePrez")._id,
-            'timeline': timelineTitle,
-            'state': stateNumber,
-        }).content;
+        // return Slides.findOne(
+        // {
+        //     'parentPresId': Session.get("thePrez")._id,
+        //     'timeline': timelineTitle,
+        //     'state': stateNumber,
+        // }).content;
+        
+        return Images.findOne({
+            '_id': "ZdzvmME4LSRpfisMA"
+        }).data.name;
     },
 
     'isOwner': function()
