@@ -337,6 +337,7 @@ Meteor.methods(
             }});
         }
     },
+    
     'storeImage': function(file) {
         Images.insert({'data': file});
     }

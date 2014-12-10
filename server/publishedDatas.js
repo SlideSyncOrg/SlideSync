@@ -32,5 +32,5 @@ Meteor.publish("slides", function() {
 });
 
 Meteor.publish("images", function() {
-    
+    return Images.find();
 });

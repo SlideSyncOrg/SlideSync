@@ -76,5 +76,21 @@
     <button type="button" class="btn btn-default addState">Add state</button>
     
     <input type="file" id="imageUpload"/>
+    
+    
+    
+    <ul>
+	{{#each imgs}}
+		<li><img src="{{url store='images'}}"/><img src="{{url}}"/></li>
+	{{/each}}
+	</ul>
 
+</template>
+
+<template name="images">
+	<ul>
+	{{#each imgs}}
+		<li><img src="{{url store='thumbs'}}"/><img src="{{url}}"/></li>
+	{{/each}}
+	</ul>
 </template>

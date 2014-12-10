@@ -16,4 +16,5 @@ accounts-password
 mrt:qrcodesvg
 http
 cfs:gridfs
-
+cfs:filesystem
+cfs:standard-packages
