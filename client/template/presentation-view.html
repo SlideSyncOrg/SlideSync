@@ -1,77 +1,78 @@
 <template name="presentationView">
     <div id="wrapper">
         <!-- Sidebar -->
-        
 
-            <div id="sidebar-wrapper">
 
-                <ul class="sidebar-nav">
-                    <li class="sidebar-brand">
-                        <h1>
+        <div id="sidebar-wrapper">
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <h1>
                         {{presentation.titleToDisplay}}
                         </h1>
-                    </li>
-                    {{#each addIndex presentation.timelines}}
-                    {{#if isAuthorized index }}
-                        <li class="timelineLink">
-                            {{#linkTo route='presentation.view' data=getUrlData}}
-                            <div>
-                                {{value.titleToDisplay}}
-                            <!-- color code for public/private timeline -->
-                                <div class="pull-right">
-                                    {{#if value.isPublic}}
-                                    
-                                        <div class="label label-success">Public</div>
-                                    {{else}}
-                                        <div class="label label-warning">Private</div>
-                                    {{/if}}
-                                </div>
-                            </div>
-                            {{/linkTo}}
-                        </li>
-                    {{/if}}
-                    {{/each}}
-                </ul>
+                </li>
+                {{#each addIndex presentation.timelines}} {{#if isAuthorized index }}
+                <li class="timelineLink">
+                    {{#linkTo route='presentation.view' data=getUrlData}}
+                    <div>
+                        {{value.titleToDisplay}}
+                        <!-- color code for public/private timeline -->
+                        <div class="pull-right">
+                            {{#if value.isPublic}}
 
-            </div>
+                            <div class="label label-success">Public</div>
+                            {{else}}
+                            <div class="label label-warning">Private</div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/linkTo}}
+                </li>
+                {{/if}} {{/each}}
+            </ul>
+
+        </div>
         {{#if isAuthorized timelineIndex}}
-            <div id="page-content-wrapper">
-                <div>
-                    {{#if isSidebarToggled}}
-                        <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-right"></span> 
-                    {{else}}
-                        <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-left"></span> 
-                    {{/if}}
-                </div>
-                <div>
-                <div class="video-container">
-                    
-                    <iframe id="slideContentIframe" srcdoc="{{currentContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen="" ></iframe>
-                </div>
-
-                    <p>You are viewing a slide!</p>
-
-                    <p>Owner is {{presentation.owner}}</p>
-                    <p>title is {{presentation.titleToDisplay}}</p>
-
-                    <p>Timeline: {{currentTimeline}}</p>
-                    <p>State: {{currentState}}</p>
-                    <p>Content:{{currentContent}}</p>
-
-                    {{#if isOwner}}
-                        <button id="previousState">Prev</button>
-                        <button id="nextState">Next</button>
-                    {{/if}}
-
-                    <input type="hidden" id="hideAndSeek" />
-                </div>
+        <div id="page-content-wrapper">
+            <div>
+                {{#if isSidebarToggled}}
+                <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-right"></span> {{else}}
+                <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-left"></span> {{/if}}
             </div>
+            <div>
+                {{#if slideIsHtml}}
+                <div class="video-container">
+                    <iframe id="slideContentIframe" srcdoc="{{currentContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen=""></iframe>
+                </div>
+                {{else}} 
+                    {{#with currentContent }}
+                    <img src="{{url store='images'}}" /> 
+                    {{/with}}
+                {{/if}}
+
+                <p>You are viewing a slide!</p>
+
+                <p>Owner is {{presentation.owner}}</p>
+                <p>title is {{presentation.titleToDisplay}}</p>
+
+                <p>Timeline: {{currentTimeline}}</p>
+                <p>State: {{currentState}}</p>
+                <p>Content:{{currentContent}}</p>
+
+                {{#if isOwner}}
+                <button id="previousState">Prev</button>
+                <button id="nextState">Next</button>
+                {{/if}}
+
+                <input type="hidden" id="hideAndSeek" />
+            </div>
+        </div>
 
         {{else}}
-            <div id="page-content-wrapper">
-                <hi>Sorry, you are not authorized to view this slide. Please change to a different timeline or <a href="{{ pathFor 'home'}}">log in.</a>
-                </hi>
-            </div>
+        <div id="page-content-wrapper">
+            <hi>Sorry, you are not authorized to view this slide. Please change to a different timeline or <a href="{{ pathFor 'home'}}">log in.</a>
+            </hi>
+        </div>
         {{/if}}
     </div>
 </template>
