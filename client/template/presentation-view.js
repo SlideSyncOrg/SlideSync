@@ -51,6 +51,7 @@ Template.presentationView.helpers({
         });
 
         if (daSlide.isHtml) {
+            console.log(daSlide.content);
             return daSlide.content
         } else {
             daImage = Images.findOne({
