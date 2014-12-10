@@ -36,7 +36,7 @@ Template.presentationOverview.helpers({
     },
     'imgs': function() {
       return Images.find();
-    }
+    },
 
     'log': function() {
         console.log(this)
@@ -49,7 +49,7 @@ Template.presentationOverview.helpers({
             timeline: this.title,
             state: Template.parentData(1).index,
         }
-    }
+    },
 
 });
 
