@@ -1,21 +1,46 @@
 <template name="slideEdit">
     <div class="container">
-        <!-- editor -->
-        <div class="col-md-6">
-            <h1>Editor</h1>
-            {{log}}
-            <textarea rows="30" cols="80" class="form-control" id="textAreaContent">
-                {{trimedContent}}
-            </textarea>
-            <button class="btn btn-default" id="submitChanges">Preview</button>
+        <div class="col-md-12">
+            <button class="btn btn-primary" id="toggleEditor">Toggle editor</button>
         </div>
-        <!-- view result -->
-        <div class="col-md-6">
-            <h1>Result</h1>
-                            <div class="video-container">
-                    
-                    <iframe id="slideContentIframe" srcdoc="{{content}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen="" ></iframe>
-                </div>
+        {{#if currentEditor}} {{> htmlEditor}} {{else}} {{>imageUploader}} {{/if}}
+
+    </div>
+</template>
+
+<template name="imageUploader">
+    this is image uploader
+    <input type="file" id="imageUpload" />
+    <ul>
+        {{#each imgs}}
+        <li>
+            <img src="{{url store='images'}}" style="width:128px;height:128px" class="anImage" />
+        </li>
+        {{/each}}
+    </ul>
+            <div class="col-md-12">
+            <button class="btn btn-success" id="submitNewContent">Submit</button>
+        </div>
+</template>
+
+<template name="htmlEditor">
+    <!-- editor -->
+    <div class="col-md-6">
+        <h1>Editor</h1>
+        <textarea rows="30" cols="80" class="form-control" id="textAreaContent">
+            {{trimedContent}}
+        </textarea>
+        <button class="btn btn-default" id="previewChanges">Preview</button>
+    </div>
+    <!-- view result -->
+    <div class="col-md-6">
+        <h1>Result</h1>
+        <div class="video-container">
+
+            <iframe id="slideContentIframe" srcdoc="{{getEditorContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen=""></iframe>
         </div>
     </div>
+            <div class="col-md-12">
+            <button class="btn btn-success" id="submitNewContent">Submit</button>
+        </div>
 </template>
