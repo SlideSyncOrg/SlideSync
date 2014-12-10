@@ -1,37 +1,28 @@
 //This file contain the API of the application
 
-Meteor.methods(
-{
+Meteor.methods({
     //Add a new presentation
-    'insertPresentation': function(title)
-    {
+    'insertPresentation': function(title) {
         //Security check
-        if (!Meteor.user())
-        {
+        if (!Meteor.user()) {
             console.log("Someone tried to make a presentation named " + title + " without being logged in.");
-        }
-        else
-        {
+        } else {
             console.log("Create a new presentation called " + title)
             var ownerPrettyName;
 
             //OAuth users have profile names, email/password users do not.
-            if (Meteor.user().profile.name)
-            {
+            if (Meteor.user().profile.name) {
                 ownerPrettyName = Meteor.user().profile.name;
-            }
-            else
-            {
+            } else {
                 ownerPrettyName = Meteor.user().emails[0].address;
             }
 
             //Initial database call to create presentation
-            var idPresCreated = Presentations.insert(
-            {
+            var idPresCreated = Presentations.insert({
                 'owner': ownerPrettyName,
                 'ownerId': Meteor.userId(),
                 'titleToDisplay': title,
-                'title':slug(title),
+                'title': slug(title),
                 'createdAt': new Date(), // current time
                 'timelines': [],
                 'statesCount': 0,
@@ -49,28 +40,21 @@ Meteor.methods(
 
 
     //Delete given presentation
-    'deletePresentation': function(parentPresId)
-    {
+    'deletePresentation': function(parentPresId) {
         //Security check
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to delete " + parentPresId + " without being logged in.");
-        }
-        else
-        {
+        } else {
             console.log("Remove a presentation " + parentPresId)
                 //Delete the parent object (with timeline and state)
-            Presentations.remove(
-            {
+            Presentations.remove({
                 '_id': parentPresId
             });
 
             //remove the slides child
-            Slides.remove(
-            {
+            Slides.remove({
                 'parentPresId': parentPresId
-            }, function(error, recordsRemoved)
-            {
+            }, function(error, recordsRemoved) {
                 console.log("and " + recordsRemoved + " attached slides")
             });
         }
@@ -78,27 +62,19 @@ Meteor.methods(
 
 
     //Add a timeline with given name, public status to given presentation
-    'addTimeline': function(parentPresId, name, public)
-    {
+    'addTimeline': function(parentPresId, name, public) {
         //Security check
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
-        }
-        else
-        {
+        } else {
             console.log('Add a new timeline called ' + name + " to " + parentPresId)
             sluggedName = slug(name)
                 //Database call to add timeline
-            Presentations.update(
-            {
+            Presentations.update({
                 '_id': parentPresId
-            },
-            {
-                $push:
-                {
-                    'timelines':
-                    {
+            }, {
+                $push: {
+                    'timelines': {
                         'title': sluggedName,
                         'titleToDisplay': name,
                         'isPublic': public
@@ -107,12 +83,10 @@ Meteor.methods(
             });
 
             //For each state, add a slide to the new timeline
-            var numStates = Presentations.findOne(
-            {
+            var numStates = Presentations.findOne({
                 _id: parentPresId
             }).statesCount
-            for (x = 1; x <= numStates; x++)
-            {
+            for (x = 1; x <= numStates; x++) {
 
                 Meteor.call('addSlide',
                     parentPresId,
@@ -125,43 +99,33 @@ Meteor.methods(
 
 
     //Add a state to the given presentation
-    'addState': function(parentPresId)
-    {
+    'addState': function(parentPresId) {
         //Security check
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to add a state to " + parentPresId + " without being logged in.");
-        }
-        else
-        {
+        } else {
             console.log("Add new state to " + parentPresId);
 
             //Get array of timelines
-            var timelines = Presentations.findOne(
-            {
+            var timelines = Presentations.findOne({
                 '_id': parentPresId
             }).timelines;
 
             //Increment total number of states, get that new total
-            Presentations.update(
-            {
+            Presentations.update({
                 '_id': parentPresId
-            },
-            {
-                $inc:
-                {
+            }, {
+                $inc: {
                     'statesCount': 1
                 }
             });
 
-            var numState = Presentations.findOne(
-            {
+            var numState = Presentations.findOne({
                 '_id': parentPresId
             }).statesCount;
 
             //For each timeline, add new slide with new highest state
-            for (x = 0; x < timelines.length; x++)
-            {
+            for (x = 0; x < timelines.length; x++) {
 
                 Meteor.call('addSlide',
                     parentPresId,
@@ -172,59 +136,44 @@ Meteor.methods(
         }
     },
 
-    'addSlide': function(parentPresId, timelineSlugName, numState, content)
-    {
+    'addSlide': function(parentPresId, timelineSlugName, numState, content) {
         //Security check
-        if (!Meteor.user())
-        {
+        if (!Meteor.user()) {
             console.log("Someone tried to add a slide to " + parentPresId + " without being logged in.");
-        }
-        else
-        {
-            Slides.insert(
-            {
+        } else {
+            Slides.insert({
                 'ownerId': Meteor.userId(),
-                'parentPresId':parentPresId,
+                'parentPresId': parentPresId,
                 'timeline': timelineSlugName,
                 'state': numState,
-                'content': content
+                'content': content,
+                'isHtml': true,
             });
         }
     },
 
 
     //Advance to next state being presented
-    'nextState': function(parentPresId)
-    {
+    'nextState': function(parentPresId) {
         //Security check
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to move forward in " + parentPresId);
-        }
-        else
-        {
+        } else {
             //Find this presentation
-            var thePres = Presentations.findOne(
-            {
+            var thePres = Presentations.findOne({
                 '_id': parentPresId
             });
 
             //Check if we are at last state
-            if (thePres.currentState >= thePres.statesCount)
-            {
+            if (thePres.currentState >= thePres.statesCount) {
                 //Do nothing
                 return false;
-            }
-            else
-            {
+            } else {
                 //Common case
-                Presentations.update(
-                {
+                Presentations.update({
                     '_id': parentPresId
-                },
-                {
-                    $inc:
-                    {
+                }, {
+                    $inc: {
                         'currentState': 1
                     }
                 });
@@ -234,36 +183,25 @@ Meteor.methods(
 
 
     //Go back to previous state being presented
-    'previousState': function(parentPresId)
-    {
+    'previousState': function(parentPresId) {
         //Security check
-        if (!Meteor.call('hasAccessToPresentation', parentPresId))
-        {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to move backwards in " + parentPresId);
-        }
-        else
-        {
+        } else {
             //Find this presentation
-            var thePres = Presentations.findOne(
-            {
+            var thePres = Presentations.findOne({
                 '_id': parentPresId
             });
             //Check if we are at first state
-            if (thePres.currentState <= 1)
-            {
+            if (thePres.currentState <= 1) {
                 //Do nothing
                 return false;
-            }
-            else
-            {
+            } else {
                 //Common case
-                Presentations.update(
-                {
+                Presentations.update({
                     '_id': parentPresId
-                },
-                {
-                    $inc:
-                    {
+                }, {
+                    $inc: {
                         'currentState': -1
                     }
                 });
@@ -273,56 +211,46 @@ Meteor.methods(
 
     //Generate a shortened URL to make it easy for viewers to find presentation,
     //as well as provide analytics
-    'addShortenUrl': function(presId)
-    {
+    'addShortenUrl': function(presId) {
         console.log("Compute the short url for the presentation : " + presId)
             //Hard coded path to view route for this presentation
         urlToView = 'presentations/' + presId + '/view';
 
         //Make the request to google url shortener api
         res = Meteor.http.post(
-            'https://www.googleapis.com/urlshortener/v1/url',
-            {
-                'data':
-                {
+            'https://www.googleapis.com/urlshortener/v1/url', {
+                'data': {
                     'longUrl': Meteor.absoluteUrl(urlToView),
                 },
                 // query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
-                'headers':
-                {
+                'headers': {
                     'Content-Type': 'application/json'
                 }
             }
         );
 
         //Find the presentation and insert short URL
-        Presentations.update(
-        {
+        Presentations.update({
             '_id': presId
-        },
-        {
-            $set:
-            {
+        }, {
+            $set: {
                 'shortUrl': res.data.id
             }
         });
     },
 
     //Helper funching for security checks
-    'hasAccessToPresentation': function(parentPresId)
-    {
-        var ownerId = Presentations.findOne(
-        {
+    'hasAccessToPresentation': function(parentPresId) {
+        var ownerId = Presentations.findOne({
             '_id': parentPresId
-        },
-        {
+        }, {
             ownerId: 1,
             _id: 0
         }).ownerId;
         return Meteor.userId() == ownerId;
     },
 
-    'updateSlideContent': function(parentPresId, timelineName, stateNumber, newContent) {
+    'updateSlideContent': function(parentPresId, timelineName, stateNumber, isHtml, newContent) {
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
         } else {
@@ -332,29 +260,32 @@ Meteor.methods(
                 'parentPresId': parentPresId,
                 'timeline': timelineName,
                 'state': parseInt(stateNumber)
-            }, {$set:{
-                'content':newContent
-            }});
+            }, {
+                $set: {
+                    'content': newContent,
+                    'isHtml': isHtml
+                }
+            });
         }
     },
-    
+
     'storeImage': function(file) {
-        Images.insert({'data': file});
+        return Images.insert({
+            'data': file
+        });
     }
 })
 
 
 //useful function
-var slug = function(str)
-{
+var slug = function(str) {
     str = str.replace(/^\s+|\s+$/g, ''); // trim
     str = str.toLowerCase();
 
     // remove accents, swap ñ for n, etc
     var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
     var to = "aaaaaeeeeeiiiiooooouuuunc------";
-    for (var i = 0, l = from.length; i < l; i++)
-    {
+    for (var i = 0, l = from.length; i < l; i++) {
         str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
     }
 
