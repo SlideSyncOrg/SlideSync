@@ -50,6 +50,13 @@ Template.presentationOverview.helpers(
             'state': state,
         }).content;
     },
+    
+    'randImg': function() {
+      return Images.findOne();
+    },
+    'imgs': function() {
+      return Images.find();
+    }
 
 });
 
@@ -78,12 +85,28 @@ Template.presentationOverview.events(
     },
     
     //As found at https://gist.github.com/dariocravero/3922137
-    'change #imageUpload': function(event) {
-        console.log(event);
-        _.each(event.target.files, function(file) {
-            console.log(file);
-            Meteor.call('storeImage', file);
+    'change #imageUpload': function(event, template) {
+        //console.log(event);
+        //Meteor.call('storeImage', event, template);
+        FS.Utility.eachFile(event, function(file) {
+          var newFile = new FS.File(file);
+          Images.insert(newFile, function (err, fileObj) {
+              console.log(err);
+              console.log(fileObj);
+            //If !err, we have inserted new doc with ID fileObj._id, and
+            //kicked off the data upload using HTTP
+          });
+          
         });
+    }
+});
+
+Template.images.helpers({
+    randImg: function() {
+      return Images.findOne();
+    },
+    imgs: function() {
+      return Images.find();
     }
 });
 
