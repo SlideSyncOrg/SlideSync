@@ -14,6 +14,13 @@ Template.presentationView.created = function() {
                 event.preventDefault();
                 Meteor.call('previousState', Session.get('thePrez')._id);
                 break;
+            case 27: //escape
+                event.preventDefault();
+                if (Meteor.user()) {
+
+                    Router.go('presentation.overview', {'_id':Session.get("thePrez")._id})
+                }
+                break;
         }
     }, false);
 };
