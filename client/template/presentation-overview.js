@@ -1,6 +1,9 @@
 Template.presentationOverview.created = function() {
     //When the template is created, store the presentation id in session
     Session.set("thePrez", this.data._id);
+
+    Session.set("canAddTimeline", "disabled");
+
 };
 
 
@@ -30,7 +33,7 @@ Template.presentationOverview.helpers({
             'state': state,
         }).content;
     },
-    
+
 
 
     'log': function() {
@@ -44,6 +47,10 @@ Template.presentationOverview.helpers({
             timeline: this.title,
             state: Template.parentData(1).index,
         }
+    },
+
+    'isDisabled': function() {
+        return Session.get("canAddTimeline");
     },
 
 });
@@ -64,39 +71,42 @@ Template.presentationOverview.events({
 
         // Clear form
         event.target.title.value = "";
+        event.target.isPublic.checked = false;
 
         //Prevent the page to reload
         return false;
     },
-    
+
+    'click #visibility': function() {
+        //toggle te visibility of a timeline
+        Meteor.call('changeTimelineVisibility', Session.get('thePrez'), this.title, !this.isPublic);
+    },
+
+    'blur #title': function(event) {
+        //on change of title value, check if the name is unique
+        var title = event.target.value;
+
+
+        var nameToCheck = Meteor.myFunctions.slug(title);
+        if (nameToCheck != '') {
+
+            timelinesName = this.timelines.map(function(timeline) {
+                return timeline.title;
+            });
+            console.log(timelinesName)
+
+            if (!(_.contains(timelinesName, nameToCheck))) {
+                //is unique -> ok
+                Session.set("canAddTimeline", "");
+            } else {
+                //is no unique -> ko
+                Session.set("canAddTimeline", "disabled");
+            }
+        } else {
+            // value is required -> ko
+            Session.set("canAddTimeline", "disabled");
+        }
+    },
+
 
 });
-
-//As found at https://gist.github.com/dariocravero/3922137
-Meteor.saveFile = function(blob, name, type, callback) {
-  var fileReader = new FileReader(),
-      method, encoding = 'binary',
-      type = type || 'binary';
-  switch (type) {
-      case 'text':
-          // TODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
-          method = 'readAsText';
-          encoding = 'utf8';
-          break;
-      case 'binary':
-          method = 'readAsBinaryString';
-          encoding = 'binary';
-          break;
-      default:
-          method = 'readAsBinaryString';
-          encoding = 'binary';
-          break;
-  }
-  var path = "/whatever/"
-  fileReader.onload = function(file) {
-      console.log(file);
-      //Meteor.call('saveFile', file.srcElement.result, name, path, encoding, callback);
-      Meteor.call('saveFile', blob, name, path, encoding, callback);
-  }
-  fileReader[method](blob);
-}
