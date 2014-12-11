@@ -60,6 +60,7 @@ Template.presentationOverview.events({
     //Add a new state to this presentation
     'click .addState': function(event) {
         Meteor.call('addState', Session.get('thePrez'));
+        Notifications.info('New state created !');
     },
 
     //Add a new timeline to this presentation
@@ -73,8 +74,11 @@ Template.presentationOverview.events({
         event.target.title.value = "";
         event.target.isPublic.checked = false;
 
+        Notifications.info('New timeline '+title+' created !');
+
         //Prevent the page to reload
         return false;
+
     },
 
     'click #visibility': function() {
@@ -93,7 +97,6 @@ Template.presentationOverview.events({
             timelinesName = this.timelines.map(function(timeline) {
                 return timeline.title;
             });
-            console.log(timelinesName)
 
             if (!(_.contains(timelinesName, nameToCheck))) {
                 //is unique -> ok
