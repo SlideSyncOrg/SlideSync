@@ -1,9 +1,30 @@
 <template name="slideEdit">
     <div class="container content">
         <div class="col-md-12">
-            <button class="btn btn-primary" id="toggleEditor">Toggle editor</button>
+            <button class="btn btn-info" id="goBack">
+                <i class="glyphicon glyphicon glyphicon-arrow-left"></i> Back
+            </button>
+            <p></p>
         </div>
-        {{#if currentEditor}} {{> htmlEditor}} {{else}} {{>imageUploader}} {{/if}}
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active">
+                <a href="#htmlEditor" data-toggle="tab">
+                    <i class="glyphicon glyphicon-header"></i> Html Editor
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#imageUploader" data-toggle="tab">
+                    <i class="glyphicon glyphicon glyphicon-picture"></i> Image Uploader</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="htmlEditor">
+                {{> htmlEditor}}
+            </div>
+            <div class="tab-pane fade in" id="imageUploader">
+                {{>imageUploader}}
+            </div>
+        </div>
 
     </div>
 </template>
@@ -18,29 +39,30 @@
         </li>
         {{/each}}
     </ul>
-            <div class="col-md-12">
-            <button class="btn btn-success" id="submitNewContent">Submit</button>
-        </div>
+    <p></p>
+    <div class="col-md-12">
+        <button class="btn btn-success" id="submitNewContent">Submit</button>
+    </div>
 </template>
 
 <template name="htmlEditor">
     <!-- editor -->
     <div class="col-md-6">
         <h1>Editor</h1>
-        <textarea rows="30" cols="80" class="form-control" id="textAreaContent">
+        <textarea style="overflow:auto;resize:none" rows="30" cols="80" class="form-control" id="textAreaContent">
             {{trimedContent}}
         </textarea>
-        <button class="btn btn-default" id="previewChanges">Preview</button>
     </div>
     <!-- view result -->
     <div class="col-md-6">
         <h1>Result</h1>
         <div class="video-container">
 
-            <iframe id="slideContentIframe" srcdoc="{{getEditorContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen=""></iframe>
+            <iframe id="slideContentIframe" srcdoc="{{getEditorContent}}" width="500" height="800" scrolling="yes" align="top" allowfullscreen=""></iframe>
         </div>
     </div>
-            <div class="col-md-12">
-            <button class="btn btn-success" id="submitNewContent">Submit</button>
-        </div>
+    <div class="col-md-12">
+        <p></p>
+        <button class="btn btn-success" id="submitNewContent">Submit</button>
+    </div>
 </template>

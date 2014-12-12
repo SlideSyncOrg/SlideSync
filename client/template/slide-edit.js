@@ -1,34 +1,11 @@
-Template.slideEdit.created = function() {
-    //true -> html editor
-    //false -> image uploader
-    Session.set("currentEditor", true);
-}
-
-Template.slideEdit.helpers({
-    'log': function() {
-        console.log(this)
-    },
-
-
-    'currentEditor': function() {
-        return Session.get("currentEditor");
-    },
-
-
-});
 
 Template.slideEdit.events({
 
-
-    'click #toggleEditor': function() {
-        console.log("Toggling the editor mode current mode", Session.get("currentEditor"))
-            // this.isHtml = !this.isHtml
-        Session.set("currentEditor", !Session.get("currentEditor"));
+    'click #goBack': function() {
+        Router.go('presentation.overview', {'_id':this.parentPresId})
     },
 
-
 });
-
 
 /*--------------------------Image uploader code*/
 Template.imageUploader.helpers({
@@ -72,7 +49,7 @@ Template.imageUploader.events({
 
 
         // image uploader
-        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, this.state, Session.get("currentEditor"), Session.get("selectedImage"));
+        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, this.state, false/*imageUpload*/, Session.get("selectedImage"));
 
     },
 });
@@ -106,7 +83,7 @@ Template.htmlEditor.events({
     'click #submitNewContent': function() {
         //html editor
         newContent = document.getElementById("textAreaContent").value
-        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, this.state, Session.get("currentEditor"), newContent);
+        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, true/*html*/, newContent);
 
     },
 
