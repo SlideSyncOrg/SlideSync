@@ -97,6 +97,39 @@ Meteor.methods({
         }
     },
 
+    'removeTimeline': function(parentPresId, sluggedName) {
+
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to remove a timeline to " + parentPresId + " without being logged in.");
+        } else {
+
+            console.log("Removing timeline ", sluggedName, " from presentation ", parentPresId)
+                //remove the timeline from the presentation
+            Presentations.update({
+                '_id': parentPresId
+            }, {
+                '$pull': {
+                    'timelines': {
+                        'title': sluggedName,
+                    }
+                }
+            }, function(err, result) {
+                if (err) throw err;
+                console.log(result, "timeline(s) removed from pres ", parentPresId);
+            });
+
+
+            //remove slides related to that presentation
+            Slides.remove({
+                'parentPresId': parentPresId,
+                'timeline': sluggedName,
+            }, function(err, result) {
+                if (err) throw err;
+                console.log(result, "slide(s) removed related to presentation ", parentPresId, " and timeline ", sluggedName);
+            });
+        }
+    },
+
     'changeTimelineVisibility': function(parentPresId, sluggedName, public) {
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
@@ -297,4 +330,3 @@ Meteor.methods({
         });
     }
 })
-

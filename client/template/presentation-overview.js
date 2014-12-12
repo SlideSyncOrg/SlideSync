@@ -63,6 +63,12 @@ Template.presentationOverview.events({
         Notifications.info('New state created !');
     },
 
+    'click #deleteTimeline':function(){
+        console.log(Session.get('thePrez'))
+        console.log(this.title)
+        Meteor.call('removeTimeline',Session.get('thePrez'),this.title);
+    },
+
     //Add a new timeline to this presentation
     'submit #addTimeline': function(event) {
         var title = event.target.title.value;
