@@ -22,7 +22,7 @@ Meteor.methods({
                 'owner': ownerPrettyName,
                 'ownerId': Meteor.userId(),
                 'titleToDisplay': title,
-                'title': slug(title),
+                'title': Meteor.myFunctions.slug(title),
                 'createdAt': new Date(), // current time
                 'timelines': [],
                 'statesCount': 0,
@@ -68,12 +68,12 @@ Meteor.methods({
             console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
         } else {
             console.log('Add a new timeline called ' + name + " to " + parentPresId)
-            sluggedName = slug(name)
+            sluggedName = Meteor.myFunctions.slug(name)
                 //Database call to add timeline
             Presentations.update({
                 '_id': parentPresId
             }, {
-                $push: {
+                $addToSet: {
                     'timelines': {
                         'title': sluggedName,
                         'titleToDisplay': name,
@@ -94,6 +94,28 @@ Meteor.methods({
                     x,
                     "This is the <b>content</b> for slide " + x + " of timeline " + sluggedName);
             }
+        }
+    },
+
+    'changeTimelineVisibility': function(parentPresId, sluggedName, public) {
+        if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
+            console.log("Someone tried to add a timeline to " + parentPresId + " without being logged in.");
+        } else {
+            console.log('Change visibility of timeline ' + sluggedName + " to " + public);
+            var finded = Presentations.update({
+                '_id': parentPresId,
+                'timelines': {
+                    $elemMatch: {
+                        'title': sluggedName,
+                    }
+                }
+            }, {
+                $set: {
+                    'timelines.$.isPublic': public,
+                }
+            }, {
+                'multi': false
+            });
         }
     },
 
@@ -276,22 +298,3 @@ Meteor.methods({
     }
 })
 
-
-//useful function
-var slug = function(str) {
-    str = str.replace(/^\s+|\s+$/g, ''); // trim
-    str = str.toLowerCase();
-
-    // remove accents, swap ñ for n, etc
-    var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
-    var to = "aaaaaeeeeeiiiiooooouuuunc------";
-    for (var i = 0, l = from.length; i < l; i++) {
-        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-    }
-
-    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-        .replace(/\s+/g, '-') // collapse whitespace and replace by -
-        .replace(/-+/g, '-'); // collapse dashes
-
-    return str;
-};

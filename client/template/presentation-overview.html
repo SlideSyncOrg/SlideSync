@@ -17,12 +17,12 @@
             {{/with}}" class="btn btn-success" id="presentBtn">Present</a>
     </div>
     <div class="col-md-12">
-        <form id="addTimeline" role="form" class="form-inline">
+        <form id="addTimeline" role="form" class="form-inline" novalidate>
             <div class="form-group">
                 <label for="title">Timeline Name</label>
                 <input type="text" class="form-control" id="title" placeholder="Title of the new timeline" required /> Publicly visible:
                 <input type="checkbox" id="isPublic" />
-                <button type="submit" class="btn btn-primary">New timeline</button>
+                <button type="submit" {{isDisabled}} class="btn btn-primary">New timeline</button>
             </div>
         </form>
     </div>
@@ -34,13 +34,16 @@
                 <th>
                     <div>
                         {{titleToDisplay}}
-                        <p>{{#if isPublic}}
+                        <div id="visibility">
+                            <p>
 
-                            <div class="label label-success">Public</div>
-                            {{else}}
-                            <div class="label label-warning">Private</div>
-                        {{/if}}
-                        </p>
+                                {{#if isPublic}}
+                                <div class="label label-success">Public</div>
+                                {{else}}
+                                <div class="label label-warning">Private</div>
+                                {{/if}}
+                            </p>
+                        </div>
 
                     </div>
                 </th>
@@ -62,10 +65,7 @@
                     <a href="
             
                 {{pathFor 'slide.edit' data=getEditSlideUrlData}}
-            "  id="edit">Edit</a>
-            {{#with _id=_id timeline=title state=../index }}
-                
-            {{/with}}
+            " id="edit">Edit</a>
                 </td>
                 {{/each}}
             </tr>
@@ -74,12 +74,11 @@
     </table>
 
     <button type="button" class="btn btn-default addState">Add state</button>
-    
-    
-    
-    
-    
+
+
+
+
+
 
 
 </template>
-

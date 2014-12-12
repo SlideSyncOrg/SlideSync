@@ -33,7 +33,7 @@
 
         </div>
         {{#if isAuthorized timelineIndex}}
-        <div id="page-content-wrapper">
+        <div id="page-content-wrapper" class="content">
             <div>
                 {{#if isSidebarToggled}}
                 <span id="toggleSidebar" class=" glyphicon glyphicon-chevron-right"></span> {{else}}
@@ -46,7 +46,7 @@
                 </div>
                 {{else}} 
                     {{#with currentContent }}
-                    <img src="{{url store='images'}}" /> 
+                    <img src="{{url store='images'}}" class="img-responsive" alt="Responsive image"/> 
                     {{/with}}
                 {{/if}}
 

@@ -14,6 +14,13 @@ Template.presentationView.created = function() {
                 event.preventDefault();
                 Meteor.call('previousState', Session.get('thePrez')._id);
                 break;
+            case 27: //escape
+                event.preventDefault();
+                if (Meteor.user()) {
+
+                    Router.go('presentation.overview', {'_id':Session.get("thePrez")._id})
+                }
+                break;
         }
     }, false);
 };
@@ -29,20 +36,9 @@ Template.presentationView.helpers({
     },
 
     'currentContent': function() {
-        var content = "We got nothing";
         var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
         var stateNumber = this.presentation.currentState;
 
-        /*        //Go through slides array and find the one with current timeline and state
-                this.presentation.slides.forEach(function(slide)
-                {
-                    if (slide.timeline == timelineTitle && slide.state == stateNumber)
-                    {
-                        content = slide.content;
-                    }
-                });
-
-                return content;*/
 
         daSlide = Slides.findOne({
             'parentPresId': Session.get("thePrez")._id,
@@ -61,9 +57,6 @@ Template.presentationView.helpers({
             return daImage;
         };
 
-        // return Images.findOne({
-        //     '_id': "ZdzvmME4LSRpfisMA"
-        // }).data.name;
     },
 
     'slideIsHtml': function() {
