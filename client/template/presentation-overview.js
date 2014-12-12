@@ -21,7 +21,6 @@ Template.presentationOverview.helpers({
     },
 
     'displayStateCount': function() {
-
         return this.statesCount;
     },
 
@@ -32,6 +31,7 @@ Template.presentationOverview.helpers({
             'timeline': timelineName,
             'state': state,
         }).content.substring(0,30)+'...';
+        //limit the output to the 30 first characters
     },
 
 
