@@ -1,5 +1,5 @@
 <template name="presentationOverview">
-    <div class="col-md-6">
+    <div class="col-md-5">
 
         <h1>{{titleToDisplay}}</h1>
 
@@ -7,10 +7,12 @@
 
         <p>Creation date : {{createdAt}}</p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         {{>qrcode stringToRender=shortUrl size=150}}
-        <h3>the short url : </h3>
-        <a href="{{shortUrl}}">{{shortUrl}}</a>
+    </div>
+    <div class="col-md-5">
+        <h3>the short url : <a href="{{shortUrl}}">{{shortUrl}}</a>
+        </h3>
         <a href="
             {{#with _id=_id timeline=0}}
                 {{pathFor 'presentation.view'}}
@@ -25,6 +27,7 @@
                 <button type="submit" {{isDisabled}} class="btn btn-primary">New timeline</button>
             </div>
         </form>
+        <p></p>
     </div>
     <table class="table table-bordered">
         <thead>
