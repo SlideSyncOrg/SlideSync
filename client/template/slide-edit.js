@@ -1,4 +1,3 @@
-
 Template.slideEdit.events({
 
     'click #goBack': function() {
@@ -83,7 +82,7 @@ Template.htmlEditor.events({
     'click #submitNewContent': function() {
         //html editor
         newContent = document.getElementById("textAreaContent").value
-        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, true/*html*/, newContent);
+        Meteor.call('updateSlideContent', this.parentPresId, this.timeline, this.state,true/*html*/, newContent);
 
     },
 
