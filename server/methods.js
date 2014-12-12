@@ -7,7 +7,7 @@ Meteor.methods({
         if (!Meteor.user()) {
             console.log("Someone tried to make a presentation named " + title + " without being logged in.");
         } else {
-            console.log("Create a new presentation called " + title)
+            
             var ownerPrettyName;
 
             //OAuth users have profile names, email/password users do not.
@@ -27,6 +27,9 @@ Meteor.methods({
                 'timelines': [],
                 'statesCount': 0,
                 'currentState': 1
+            },function(err,result){
+                if (err) throw err;
+                console.log("Create a new presentation called " + title)
             });
         }
 
@@ -45,16 +48,19 @@ Meteor.methods({
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to delete " + parentPresId + " without being logged in.");
         } else {
-            console.log("Remove a presentation " + parentPresId)
                 //Delete the parent object (with timeline and state)
             Presentations.remove({
                 '_id': parentPresId
+            }, function(err, recordsRemoved) {
+                if (err) throw err;
+                console.log("Remove a presentation " + parentPresId)
             });
 
             //remove the slides child
             Slides.remove({
                 'parentPresId': parentPresId
-            }, function(error, recordsRemoved) {
+            }, function(err, recordsRemoved) {
+                if (err) throw err;
                 console.log("and " + recordsRemoved + " attached slides")
             });
         }
@@ -80,6 +86,9 @@ Meteor.methods({
                         'isPublic': public
                     }
                 }
+            }function(err, result) {
+                if (err) throw err;
+                console.log(result, "timeline added named",sluggedName," to presentation ", parentPresId);
             });
 
             //For each state, add a slide to the new timeline
@@ -245,7 +254,12 @@ Meteor.methods({
                 'state': numState,
                 'content': content,
                 'isHtml': true,
-            });
+            },
+function(err, result) {
+    if (err) throw err;
+    console.log(result, "slide(s) added to presentation ", parentPresId, "timeline", timelineSlugName, " and state ", stateNumber);
+})
+;
         }
     },
 
@@ -352,6 +366,8 @@ Meteor.methods({
             console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
         } else {
             console.log("Updating content of slide ", parentPresId, timelineName, stateNumber, "with ", newContent)
+
+            //update this precise slide
             Slides.update({
                 'ownerId': Meteor.userId(),
                 'parentPresId': parentPresId,
@@ -362,11 +378,14 @@ Meteor.methods({
                     'content': newContent,
                     'isHtml': isHtml
                 }
+            }function(err, result) {
+                if (err) throw err;
             });
         }
     },
 
     'storeImage': function(file) {
+        console.log(file)
         return Images.insert({
             'data': file
         });
