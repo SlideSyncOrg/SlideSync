@@ -351,7 +351,7 @@ Meteor.methods({
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
         } else {
-
+            console.log("Updating content of slide ", parentPresId, timelineName, stateNumber, "with ", newContent)
             Slides.update({
                 'ownerId': Meteor.userId(),
                 'parentPresId': parentPresId,
