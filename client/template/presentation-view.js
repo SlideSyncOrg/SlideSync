@@ -36,20 +36,9 @@ Template.presentationView.helpers({
     },
 
     'currentContent': function() {
-        var content = "We got nothing";
         var timelineTitle = this.presentation.timelines[this.timelineIndex].title;
         var stateNumber = this.presentation.currentState;
 
-        /*        //Go through slides array and find the one with current timeline and state
-                this.presentation.slides.forEach(function(slide)
-                {
-                    if (slide.timeline == timelineTitle && slide.state == stateNumber)
-                    {
-                        content = slide.content;
-                    }
-                });
-
-                return content;*/
 
         daSlide = Slides.findOne({
             'parentPresId': Session.get("thePrez")._id,
@@ -67,9 +56,6 @@ Template.presentationView.helpers({
             return daImage;
         };
 
-        // return Images.findOne({
-        //     '_id': "ZdzvmME4LSRpfisMA"
-        // }).data.name;
     },
 
     'slideIsHtml': function() {
