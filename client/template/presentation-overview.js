@@ -31,7 +31,7 @@ Template.presentationOverview.helpers({
             'parentPresId': Session.get("thePrez"),
             'timeline': timelineName,
             'state': state,
-        }).content;
+        }).content.substring(0,30)+'...';
     },
 
 
