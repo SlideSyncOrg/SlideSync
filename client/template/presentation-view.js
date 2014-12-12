@@ -1,4 +1,6 @@
 Template.presentationView.created = function() {
+
+    document.title = "Slidesync - "+this.data.presentation.title
     Session.set("sideBarHided", false);
 
     //When the template is created, store the presentation object in session
