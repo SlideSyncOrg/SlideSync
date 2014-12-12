@@ -86,7 +86,7 @@ Meteor.methods({
                         'isPublic': public
                     }
                 }
-            }function(err, result) {
+            },function(err, result) {
                 if (err) throw err;
                 console.log(result, "timeline added named",sluggedName," to presentation ", parentPresId);
             });
@@ -378,7 +378,7 @@ function(err, result) {
                     'content': newContent,
                     'isHtml': isHtml
                 }
-            }function(err, result) {
+            },function(err, result) {
                 if (err) throw err;
             });
         }
