@@ -69,6 +69,12 @@ Template.presentationOverview.events({
         Meteor.call('removeTimeline',Session.get('thePrez'),this.title);
     },
 
+    'click #deleteState':function(){
+        console.log(Session.get('thePrez'))
+        console.log(this.index)
+        Meteor.call('removeState',Session.get('thePrez'),this.index);
+    },
+
     //Add a new timeline to this presentation
     'submit #addTimeline': function(event) {
         var title = event.target.title.value;
