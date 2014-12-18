@@ -7,7 +7,7 @@ Meteor.methods({
         if (!Meteor.user()) {
             console.log("Someone tried to make a presentation named " + title + " without being logged in.");
         } else {
-            
+
             var ownerPrettyName;
 
             //OAuth users have profile names, email/password users do not.
@@ -27,7 +27,7 @@ Meteor.methods({
                 'timelines': [],
                 'statesCount': 0,
                 'currentState': 1
-            },function(err,result){
+            }, function(err, result) {
                 if (err) throw err;
                 console.log("Create a new presentation called " + title)
             });
@@ -48,7 +48,7 @@ Meteor.methods({
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried to delete " + parentPresId + " without being logged in.");
         } else {
-                //Delete the parent object (with timeline and state)
+            //Delete the parent object (with timeline and state)
             Presentations.remove({
                 '_id': parentPresId
             }, function(err, recordsRemoved) {
@@ -86,9 +86,9 @@ Meteor.methods({
                         'isPublic': public
                     }
                 }
-            },function(err, result) {
+            }, function(err, result) {
                 if (err) throw err;
-                console.log(result, "timeline added named",sluggedName," to presentation ", parentPresId);
+                console.log(result, "timeline added named", sluggedName, " to presentation ", parentPresId);
             });
 
             //For each state, add a slide to the new timeline
@@ -242,24 +242,23 @@ Meteor.methods({
         }
     },
 
-    'addSlide': function(parentPresId, timelineSlugName, numState, content) {
+    'addSlide': function(parentPresId, timelineSlugName, stateNumber, content) {
         //Security check
         if (!Meteor.user()) {
             console.log("Someone tried to add a slide to " + parentPresId + " without being logged in.");
         } else {
             Slides.insert({
-                'ownerId': Meteor.userId(),
-                'parentPresId': parentPresId,
-                'timeline': timelineSlugName,
-                'state': numState,
-                'content': content,
-                'isHtml': true,
-            },
-function(err, result) {
-    if (err) throw err;
-    console.log(result, "slide(s) added to presentation ", parentPresId, "timeline", timelineSlugName, " and state ", stateNumber);
-})
-;
+                    'ownerId': Meteor.userId(),
+                    'parentPresId': parentPresId,
+                    'timeline': timelineSlugName,
+                    'state': stateNumber,
+                    'content': content,
+                    'isHtml': true,
+                },
+                function(err, result) {
+                    if (err) throw err;
+                    console.log(result, "slide(s) added to presentation ", parentPresId, "timeline", timelineSlugName, " and state ", stateNumber);
+                });
         }
     },
 
@@ -378,7 +377,7 @@ function(err, result) {
                     'content': newContent,
                     'isHtml': isHtml
                 }
-            },function(err, result) {
+            }, function(err, result) {
                 if (err) throw err;
             });
         }
