@@ -53,6 +53,10 @@ Template.presentationOverview.helpers({
         return Session.get("canAddTimeline");
     },
 
+    'isTheFirstTimeline': function(index) {
+        return index == 0;
+    }
+
 });
 
 
@@ -65,7 +69,7 @@ Template.presentationOverview.events({
 
     'click #deleteTimeline': function() {
         if (confirm('Are you sure you want to delete this timeline ?')) {
-            Meteor.call('removeTimeline', Session.get('thePrez'), this.title);
+            Meteor.call('removeTimeline', Session.get('thePrez'), this.value.title);
         };
     },
 
@@ -95,7 +99,7 @@ Template.presentationOverview.events({
 
     'click #visibility': function() {
         //toggle te visibility of a timeline
-        Meteor.call('changeTimelineVisibility', Session.get('thePrez'), this.title, !this.isPublic);
+        Meteor.call('changeTimelineVisibility', Session.get('thePrez'), this.value.title, !this.value.isPublic);
     },
 
     'blur #title': function(event) {

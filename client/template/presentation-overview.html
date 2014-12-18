@@ -33,22 +33,24 @@
         <thead>
             <tr>
                 <th>States</th>
-                {{#each timelines}}
+                {{#each addIndex timelines}}
                 <th>
                     <div>
-                        {{titleToDisplay}}
+                        {{value.titleToDisplay}}
+
+                        {{#if isTheFirstTimeline index}}
+                            
+                        {{else}}
+
                         <button class="btn btn-danger btn-xs pull-right" id="deleteTimeline">X</button>
-                        <div id="visibility" style="cursor: pointer;">
-                            <p>
-
-                                {{#if isPublic}}
-                                <div class="label label-success">Public</div>
-                                {{else}}
-                                <div class="label label-warning">Private</div>
-                                {{/if}}
-                            </p>
-                        </div>
-
+                        <p>
+                            {{#if value.isPublic}}
+                            <div class="label label-success" id="visibility" style="cursor: pointer;">Public</div>
+                            {{else}}
+                            <div class="label label-warning" id="visibility" style="cursor: pointer;">Private</div>
+                            {{/if}}
+                        </p>
+                        {{/if}}
                     </div>
                 </th>
                 {{/each}}
