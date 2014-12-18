@@ -10,25 +10,25 @@ Meteor.publish("userData", function() {
 });
 
 Meteor.publish("presentations", function() {
-    //if (this.userId) {
+    if (this.userId) {
         return Presentations.find({
             //only get data the user own
-    //        'ownerId': this.userId
+            'ownerId': this.userId
         });
-    // } else {
-    //     this.ready();
-    // }
+    } else {
+        return Presentations.find({});
+    }
 });
 
 Meteor.publish("slides", function() {
-    // if (this.userId) {
+    if (this.userId) {
         return Slides.find({
-            //only get our data
-            // 'ownerId': this.userId,
+            // only get our data
+            'ownerId': this.userId,
         });
-    // } else {
-    //     this.ready();
-    // }
+    } else {
+        return Slides.find({})
+    }
 });
 
 Meteor.publish("images", function() {
