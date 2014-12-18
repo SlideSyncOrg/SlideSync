@@ -30,7 +30,7 @@ Template.presentationOverview.helpers({
             'parentPresId': Session.get("thePrez"),
             'timeline': timelineName,
             'state': state,
-        }).content.substring(0,30)+'...';
+        }).content.substring(0, 30) + '...';
         //limit the output to the 30 first characters
     },
 
@@ -63,16 +63,16 @@ Template.presentationOverview.events({
         Notifications.info('New state created !');
     },
 
-    'click #deleteTimeline':function(){
-        console.log(Session.get('thePrez'))
-        console.log(this.title)
-        Meteor.call('removeTimeline',Session.get('thePrez'),this.title);
+    'click #deleteTimeline': function() {
+        if (confirm('Are you sure you want to delete this timeline ?')) {
+            Meteor.call('removeTimeline', Session.get('thePrez'), this.title);
+        };
     },
 
-    'click #deleteState':function(){
-        console.log(Session.get('thePrez'))
-        console.log(this.index)
-        Meteor.call('removeState',Session.get('thePrez'),this.index);
+    'click #deleteState': function() {
+        if (confirm('Are you sure you want to delete this state ?')) {
+            Meteor.call('removeState', Session.get('thePrez'), this.index);
+        };
     },
 
     //Add a new timeline to this presentation
@@ -86,7 +86,7 @@ Template.presentationOverview.events({
         event.target.title.value = "";
         event.target.isPublic.checked = false;
 
-        Notifications.info('New timeline '+title+' created !');
+        Notifications.info('New timeline ' + title + ' created !');
 
         //Prevent the page to reload
         return false;

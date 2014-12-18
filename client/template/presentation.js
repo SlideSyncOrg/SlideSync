@@ -18,9 +18,8 @@ Template.presentations.events({
         var title = event.target.title.value;
 
         //Make call to server
-        Meteor.call('insertPresentation', title, function() {
-        });
-            Notifications.info('Presentation created !');
+        Meteor.call('insertPresentation', title, function() {});
+        Notifications.info('Presentation created !');
 
         //Clear form
         event.target.title.value = "";
@@ -33,7 +32,9 @@ Template.presentations.events({
 
     //Delete presentation
     'click #deleteBtn': function() {
-        Meteor.call('deletePresentation', this._id);
+        if (confirm('Are you sure you want to delete this presentation ?')) {
+            Meteor.call('deletePresentation', this._id);
+        };
     },
 
 });
