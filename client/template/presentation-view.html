@@ -42,7 +42,7 @@
             <div>
                 {{#if slideIsHtml}}
                 <div class="video-container">
-                    <iframe id="slideContentIframe" srcdoc="{{currentContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen=""></iframe>
+                    <iframe id="slideContentIframe" srcdoc="{{currentContent}}" width="500" height="500" scrolling="yes" align="top" allowfullscreen="" sandbox="allow-scripts allow-same-origin"></iframe>
                 </div>
                 {{else}} 
                     {{#with currentContent }}
