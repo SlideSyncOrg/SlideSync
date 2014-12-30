@@ -10,6 +10,10 @@ Meteor.methods({
             ownerId: 1,
             _id: 0
         }).ownerId;
+
+        //false if no user is logged-in 
+        //   or if we can't find the logged user 
+        //   or if the logged user do not owne the presentation he try to access
         return Meteor.userId() == ownerId;
     },
 

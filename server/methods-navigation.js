@@ -24,6 +24,7 @@ Meteor.methods({
                     '_id': parentPresId
                 }, {
                     $inc: {
+                        // increment current state
                         'currentState': 1
                     }
                 });
@@ -52,6 +53,7 @@ Meteor.methods({
                     '_id': parentPresId
                 }, {
                     $inc: {
+                        // decrement current state
                         'currentState': -1
                     }
                 });

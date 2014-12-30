@@ -34,7 +34,7 @@ Meteor.methods({
         }
 
 
-        //Add first timeline, state, and shortened URL
+        //Add base timelines, states, and shorten the URL
         Meteor.call('addTimeline', idPresCreated, 'Public timeline', true)
         Meteor.call('addTimeline', idPresCreated, 'Main timeline', false)
         Meteor.call('addState', idPresCreated)
@@ -56,7 +56,7 @@ Meteor.methods({
                 console.log("Remove a presentation " + parentPresId)
             });
 
-            //remove the slides child
+            //remove the slides child objects
             Slides.remove({
                 'parentPresId': parentPresId
             }, function(err, recordsRemoved) {
@@ -69,16 +69,17 @@ Meteor.methods({
     //Generate a shortened URL to make it easy for viewers to find presentation,
     'addShortenUrl': function(presId) {
         console.log("Compute the short url for the presentation : " + presId)
-            //Hard coded path to view route for this presentation
+
+        //Hard coded path to view route for this presentation
         urlToView = 'presentations/' + presId + '/view';
 
         //Make the request to google url shortener api
+        //this call is synchronous
         res = Meteor.http.post(
             'https://www.googleapis.com/urlshortener/v1/url', {
                 'data': {
                     'longUrl': Meteor.absoluteUrl(urlToView),
                 },
-                // query: 'key=AIzaSyBagJ1RvyE2FihnhaGuSwg000cxqgWWbK4',
                 'headers': {
                     'Content-Type': 'application/json'
                 }

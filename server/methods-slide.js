@@ -1,7 +1,8 @@
 //API concerning slides
 Meteor.methods({
 
-	    'updateSlideContent': function(parentPresId, timelineName, stateNumber, isHtml, newContent) {
+    'updateSlideContent': function(parentPresId, timelineName, stateNumber, isHtml, newContent) {
+        //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
             console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
         } else {
@@ -15,6 +16,7 @@ Meteor.methods({
                 'state': parseInt(stateNumber)
             }, {
                 $set: {
+                    //replace the content by the given new content
                     'content': newContent,
                     'isHtml': isHtml
                 }
@@ -23,7 +25,8 @@ Meteor.methods({
             });
         }
     },
-        'addSlide': function(parentPresId, timelineSlugName, stateNumber, content) {
+    
+    'addSlide': function(parentPresId, timelineSlugName, stateNumber, content) {
         //Security check
         if (!Meteor.user()) {
             console.log("Someone tried to add a slide to " + parentPresId + " without being logged in.");
