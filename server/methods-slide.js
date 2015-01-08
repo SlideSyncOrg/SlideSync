@@ -1,18 +1,18 @@
 //API concerning slides
 Meteor.methods({
 
-    'updateSlideContent': function(parentPresId, timelineName, stateNumber, isHtml, newContent) {
+    'updateSlideContent': function(parentPresId, timelineSlugName, stateNumber, isHtml, newContent) {
         //Security check
         if (!Meteor.call('hasAccessToPresentation', parentPresId)) {
-            console.log("Someone tried update slide content of ", parentPresId, timelineName, stateNumber);
+            console.log("Someone tried update slide content of ", parentPresId, timelineSlugName, stateNumber);
         } else {
-            console.log("Updating content of slide ", parentPresId, timelineName, stateNumber, "with ", newContent)
+            console.log("Updating content of slide ", parentPresId, timelineSlugName, stateNumber, "with ", newContent)
 
             //update this precise slide
             Slides.update({
                 'ownerId': Meteor.userId(),
                 'parentPresId': parentPresId,
-                'timeline': timelineName,
+                'timeline': timelineSlugName,
                 'state': parseInt(stateNumber)
             }, {
                 $set: {

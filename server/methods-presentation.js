@@ -67,11 +67,11 @@ Meteor.methods({
     },
 
     //Generate a shortened URL to make it easy for viewers to find presentation,
-    'addShortenUrl': function(presId) {
-        console.log("Compute the short url for the presentation : " + presId)
+    'addShortenUrl': function(parentPresId) {
+        console.log("Compute the short url for the presentation : " + parentPresId)
 
         //Hard coded path to view route for this presentation
-        urlToView = 'presentations/' + presId + '/view';
+        urlToView = 'presentations/' + parentPresId + '/view';
 
         //Make the request to google url shortener api
         //this call is synchronous
